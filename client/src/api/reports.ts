@@ -33,7 +33,7 @@ export const generateReport = async (data: {
     const { job_id } = response.data;
 
     // 2. Establish WebSocket connection
-    return new Promise<FinalReportData>((resolve, reject) => {
+    return new Promise<{job_id: string, finalReport: FinalReportData}>((resolve, reject) => {
       const ws = new WebSocket(`${BACKEND_URL.replace('http', 'ws')}/ws/status/${job_id}`);
 
       ws.onopen = () => {
@@ -53,7 +53,7 @@ export const generateReport = async (data: {
 
         if (message.status === 'completed' && message.step === 'editing') {
           // Final report received
-          resolve(message.data as FinalReportData);
+          resolve({job_id, finalReport: message.data as FinalReportData});
           ws.close();
         } else if (message.status === 'error') {
           reject(new Error(message.message || 'An unknown error occurred during processing.'));
@@ -87,63 +87,28 @@ export const generateReport = async (data: {
 // obsolete or need to fetch from a persistent storage if implemented in the backend.
 // For now, I will comment out the mock and leave the actual API call commented out as well,
 // as it's not clear if the backend has a /reports/:id endpoint.
-export const getReport = async (id: string) => {
-  // This function needs to be re-evaluated based on how reports are stored and retrieved
-  // after generation. If the full report is passed via state/context from HomePage to ReportPage,
-  // this function might not be needed for displaying the generated report.
-  // If reports are persisted in the backend, a new endpoint would be needed.
-  throw new Error("getReport is not implemented for the FastAPI backend. Reports are streamed via WebSocket.");
+export const getReport = async (jobId: string): Promise<FinalReportData> => {
+  try {
+    const response = await api.get(`${BACKEND_URL}/reports/${jobId}`);
+    return response.data as FinalReportData;
+  } catch (error: any) {
+    console.error(`Error fetching report ${jobId}:`, error);
+    throw new Error(error?.response?.data?.detail || error.message || `Failed to fetch report ${jobId}.`);
+  }
 };
 
 // Description: Get user's report history
 // Endpoint: GET /api/reports/history
 // Request: {}
 // Response: { reports: Array<{ id: string, topic: string, createdAt: string, preferences: ReportPreferences }> }
-export const getReportHistory = async () => {
-  // Mocking the response
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve([
-        {
-          id: "report_1",
-          topic: "Artificial Intelligence in Healthcare 2024",
-          createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
-          preferences: {
-            focus: "Technical Details",
-            depth: 4,
-            tone: "Analytical"
-          }
-        },
-        {
-          id: "report_2",
-          topic: "Climate Change Policies and Environmental Action",
-          createdAt: new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString(),
-          preferences: {
-            focus: "General Overview",
-            depth: 3,
-            tone: "Neutral"
-          }
-        },
-        {
-          id: "report_3",
-          topic: "Cryptocurrency Market Trends and Regulations",
-          createdAt: new Date(Date.now() - 72 * 60 * 60 * 1000).toISOString(),
-          preferences: {
-            focus: "Market Impact",
-            depth: 5,
-            tone: "Critical"
-          }
-        }
-      ]);
-    }, 500);
-  });
-  // Uncomment the below lines to make an actual API call
-  // try {
-  //   const response = await api.get('/api/reports/history');
-  //   return response.data.reports;
-  // } catch (error: any) {
-  //   throw new Error(error?.response?.data?.message || error.message);
-  // }
+export const getReportHistory = async (): Promise<Array<{ job_id: string, topic: string, timestamp: string, user_preferences: ReportPreferences }>> => {
+  try {
+    const response = await api.get(`${BACKEND_URL}/reports/history`);
+    return response.data;
+  } catch (error: any) {
+    console.error("Error fetching report history:", error);
+    throw new Error(error?.response?.data?.detail || error.message || "Failed to fetch report history.");
+  }
 };
 
 // Description: Delete a report

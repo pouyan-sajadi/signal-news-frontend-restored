@@ -10,96 +10,66 @@ import { RelatedTopics } from "../components/report/RelatedTopics"
 import { FinalReportData } from "../api/reports"
 import { useToast } from "../hooks/useToast"
 
+import { getReport } from "../api/reports";
+import html2pdf from 'html2pdf.js';
+
 export interface Report {
+  job_id: string;
   topic: string;
-  content: string;
-  preferences: {
+  user_preferences: {
     focus: string;
     depth: number;
     tone: string;
   };
-  stats: {
-    searchQueries: string[];
-    sourcesAnalyzed: number;
-    sourcesSelected: number;
-    processingTime: number;
-    generatedAt: string;
+  timestamp: string;
+  final_report_data: {
+    search: any[];
+    profiling: any[];
+    selection: any[];
+    synthesis: string;
+    editing: string;
   };
-  sources: Array<{
-    title: string;
-    url: string;
-    domain: string;
-  }>;
-  relatedTopics: string[];
 }
 
 export function ReportPage() {
-  const { id } = useParams<{ id: string }>() // `id` here is actually the slug from the topic
-  const navigate = useNavigate()
-  const location = useLocation()
-  const { toast } = useToast()
-  const [report, setReport] = useState<Report | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [showStats, setShowStats] = useState(false)
+  const { id } = useParams<{ id: string }>(); // `id` is now the job_id
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  const [report, setReport] = useState<Report | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [showStats, setShowStats] = useState(false);
 
   useEffect(() => {
-    if (location.state && (location.state as { report: FinalReportData }).report) {
-      const finalReportData = (location.state as { report: FinalReportData }).report;
-      // Map FinalReportData to Report interface
-      const mappedReport: Report = {
-        topic: finalReportData.topic,
-        content: finalReportData.agent_details.editing,
-        preferences: {
-          focus: "N/A", // Preferences are not directly in FinalReportData, might need to be passed separately or inferred
-          depth: 0,
-          tone: "N/A",
-        },
-        stats: {
-          searchQueries: finalReportData.agent_details.search.map((s: any) => s.query || ""), // Assuming search has a query field
-          sourcesAnalyzed: 0, // Not directly available in current FinalReportData
-          sourcesSelected: 0, // Not directly available
-          processingTime: 0, // Not directly available
-          generatedAt: new Date().toISOString(),
-        },
-        sources: [], // Not directly available
-        relatedTopics: [], // Not directly available
-      };
-
-      // Attempt to extract preferences if available in agent_details or other parts
-      // This part might need adjustment based on actual backend output for preferences
-      if (finalReportData.agent_details.synthesis) {
-        // Example: if synthesis contains preferences, parse it
-        // This is a placeholder, actual parsing logic depends on backend output
-        try {
-          const synthesisDetails = JSON.parse(finalReportData.agent_details.synthesis);
-          if (synthesisDetails.preferences) {
-            mappedReport.preferences = synthesisDetails.preferences;
-          }
-        } catch (e) {
-          // Ignore if not JSON or preferences not found
-        }
+    const fetchReport = async () => {
+      if (!id) {
+        toast({
+          title: "Report Not Found",
+          description: "No report ID provided.",
+          variant: "destructive",
+        });
+        navigate("/");
+        return;
       }
 
-      // Populate stats and sources if available in agent_details
-      if (finalReportData.agent_details.search && finalReportData.agent_details.search.length > 0) {
-        mappedReport.stats.sourcesAnalyzed = finalReportData.agent_details.search.length; // Assuming each search entry is an analyzed source
+      try {
+        setLoading(true);
+        const fetchedReport = await getReport(id);
+        setReport(fetchedReport);
+      } catch (error) {
+        console.error("Error fetching report:", error);
+        toast({
+          title: "Report Not Found",
+          description: "Failed to load report data.",
+          variant: "destructive",
+        });
+        navigate("/");
+      } finally {
+        setLoading(false);
       }
-      if (finalReportData.agent_details.selection && finalReportData.agent_details.selection.length > 0) {
-        mappedReport.stats.sourcesSelected = finalReportData.agent_details.selection.length; // Assuming each selection entry is a selected source
-      }
+    };
 
-      setReport(mappedReport);
-      setLoading(false);
-    } else {
-      // If navigated directly or state is lost, show error and redirect
-      toast({
-        title: "Report Not Found",
-        description: "Report data could not be loaded. Please generate a new report.",
-        variant: "destructive"
-      });
-      navigate("/");
-    }
-  }, [location.state, navigate, toast]);
+    fetchReport();
+  }, [id, navigate, toast]);
 
   const handleShare = () => {
     navigator.clipboard.writeText(window.location.href)
@@ -108,6 +78,38 @@ export function ReportPage() {
       description: "Report link copied to clipboard"
     })
   }
+
+  const handleExportPdf = () => {
+    if (!report) {
+      toast({
+        title: "Export Failed",
+        description: "No report data to export.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const element = document.getElementById("report-content");
+    if (element) {
+      html2pdf().from(element).set({
+        margin: [10, 10, 10, 10],
+        filename: `${report.topic.replace(/\s+/g, "_").toLowerCase()}_report.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, logging: true, dpi: 192, letterRendering: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      }).save();
+      toast({
+        title: "Export Started",
+        description: "Your report is being generated as a PDF.",
+      });
+    } else {
+      toast({
+        title: "Export Failed",
+        description: "Could not find report content to export.",
+        variant: "destructive",
+      });
+    }
+  };
 
   if (loading) {
     return (
@@ -147,7 +149,7 @@ export function ReportPage() {
             <Share2 className="h-4 w-4" />
             Share
           </Button>
-          <Button variant="outline" size="sm" className="gap-2">
+          <Button variant="outline" size="sm" onClick={handleExportPdf} className="gap-2">
             <Download className="h-4 w-4" />
             Export
           </Button>
@@ -175,14 +177,14 @@ export function ReportPage() {
           </h1>
           
           <div className="flex flex-wrap gap-2">
-            <Badge variant="secondary">{report.preferences.focus}</Badge>
-            <Badge variant="secondary">Depth: {report.preferences.depth}/5</Badge>
-            <Badge variant="secondary">{report.preferences.tone}</Badge>
+            <Badge variant="secondary">{report.user_preferences.focus}</Badge>
+            <Badge variant="secondary">Depth: {report.user_preferences.depth}/5</Badge>
+            <Badge variant="secondary">{report.user_preferences.tone}</Badge>
           </div>
           
           <p className="text-sm text-muted-foreground">
-            Generated on {new Date(report.stats.generatedAt).toLocaleDateString()} • 
-            {report.stats.sourcesSelected} sources analyzed
+            Generated on {new Date(report.timestamp).toLocaleDateString()} • 
+            {report.final_report_data.selection.length} sources selected
           </p>
         </div>
       </Card>
@@ -190,18 +192,25 @@ export function ReportPage() {
       {/* Nerd Stats */}
       {showStats && (
         <div className="mb-8">
-          <NerdStats stats={report.stats} sources={report.sources} />
+          <NerdStats 
+            searchQueries={report.final_report_data.search.map((item: any) => item.query || item.title || JSON.stringify(item))}
+            sourcesAnalyzed={report.final_report_data.search.length}
+            sourcesSelected={report.final_report_data.selection.length}
+            processingTime={0} // Placeholder, as this is not available in the current backend response
+            generatedAt={report.timestamp}
+            sources={report.final_report_data.selection.map((item: any) => ({ title: item.title, url: item.link, domain: new URL(item.link).hostname }))}
+          />
         </div>
       )}
 
       {/* Report Content */}
       <div className="mb-8">
-        <ReportContent content={report.content} />
+        <ReportContent content={report.final_report_data.editing} />
       </div>
 
       {/* Related Topics */}
       <RelatedTopics 
-        topics={report.relatedTopics}
+        topics={[]} // Related topics are not available in the current backend response
         onTopicSelect={(topic) => {
           console.log("Selected related topic:", topic)
           navigate("/", { state: { selectedTopic: topic } })

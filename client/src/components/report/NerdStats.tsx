@@ -5,21 +5,26 @@ import { Button } from "../ui/button"
 import { Badge } from "../ui/badge"
 
 interface NerdStatsProps {
-  stats: {
-    searchQueries: string[]
-    sourcesAnalyzed: number
-    sourcesSelected: number
-    processingTime: number
-    generatedAt: string
-  }
+  searchQueries: string[];
+  sourcesAnalyzed: number;
+  sourcesSelected: number;
+  processingTime: number;
+  generatedAt: string;
   sources: Array<{
-    title: string
-    url: string
-    domain: string
-  }>
+    title: string;
+    url: string;
+    domain: string;
+  }>;
 }
 
-export function NerdStats({ stats, sources }: NerdStatsProps) {
+export function NerdStats({
+  searchQueries,
+  sourcesAnalyzed,
+  sourcesSelected,
+  processingTime,
+  generatedAt,
+  sources,
+}: NerdStatsProps) {
   const [isExpanded, setIsExpanded] = useState(false)
 
   return (
@@ -36,7 +41,7 @@ export function NerdStats({ stats, sources }: NerdStatsProps) {
             </div>
             <span className="font-medium">Nerd Stats</span>
             <Badge variant="outline" className="text-xs">
-              {stats.sourcesSelected} sources
+              {sourcesSelected} sources
             </Badge>
           </div>
           {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
@@ -48,25 +53,25 @@ export function NerdStats({ stats, sources }: NerdStatsProps) {
             <div className="grid md:grid-cols-4 gap-4">
               <div className="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
                 <Search className="h-6 w-6 text-blue-600 mx-auto mb-2" />
-                <div className="text-2xl font-bold text-blue-600">{stats.searchQueries.length}</div>
+                <div className="text-2xl font-bold text-blue-600">{searchQueries.length}</div>
                 <div className="text-xs text-muted-foreground">Search Queries</div>
               </div>
 
               <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
                 <FileText className="h-6 w-6 text-green-600 mx-auto mb-2" />
-                <div className="text-2xl font-bold text-green-600">{stats.sourcesAnalyzed}</div>
+                <div className="text-2xl font-bold text-green-600">{sourcesAnalyzed}</div>
                 <div className="text-xs text-muted-foreground">Sources Analyzed</div>
               </div>
 
               <div className="text-center p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
                 <CheckCircle className="h-6 w-6 text-purple-600 mx-auto mb-2" />
-                <div className="text-2xl font-bold text-purple-600">{stats.sourcesSelected}</div>
+                <div className="text-2xl font-bold text-purple-600">{sourcesSelected}</div>
                 <div className="text-xs text-muted-foreground">Sources Selected</div>
               </div>
 
               <div className="text-center p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
                 <Clock className="h-6 w-6 text-orange-600 mx-auto mb-2" />
-                <div className="text-2xl font-bold text-orange-600">{stats.processingTime}s</div>
+                <div className="text-2xl font-bold text-orange-600">{processingTime}s</div>
                 <div className="text-xs text-muted-foreground">Processing Time</div>
               </div>
             </div>
@@ -75,7 +80,7 @@ export function NerdStats({ stats, sources }: NerdStatsProps) {
             <div className="space-y-2">
               <h4 className="font-medium">Search Queries Used</h4>
               <div className="flex flex-wrap gap-2">
-                {stats.searchQueries.map((query, index) => (
+                {searchQueries.map((query, index) => (
                   <Badge key={index} variant="secondary" className="text-xs">
                     {query}
                   </Badge>

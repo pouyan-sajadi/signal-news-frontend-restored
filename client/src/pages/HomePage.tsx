@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { HeroSection } from "../components/home/HeroSection"
 import { DailyNewsDashboard } from "../components/home/DailyNewsDashboard"
 import { TopicInput } from "../components/home/TopicInput"
-import { QuickTopics } from "../components/home/QuickTopics"
+import { ReportHistory } from "../components/home/ReportHistory"
 import { generateReport, FinalReportData } from "../api/reports"
 import { useToast } from "../hooks/useToast"
 import { Card } from "../components/ui/card"
@@ -85,7 +85,7 @@ export function HomePage() {
     setCurrentStepIndex(0)
 
     try {
-      const finalReport = await generateReport({
+      const { job_id, finalReport } = await generateReport({
         topic: topic.trim(),
         preferences,
         onProgress: (message: string, progressData?: any) => {
@@ -104,7 +104,7 @@ export function HomePage() {
 
       console.log("Report generated successfully:", finalReport)
       // Navigate to the report page, passing the full report data in state
-      navigate(`/report/${finalReport.topic.replace(/\s+/g, '-').toLowerCase()}`, { state: { report: finalReport } })
+      navigate(`/report/${job_id}`, { state: { report: finalReport } })
     } catch (error) {
       console.error("Error generating report:", error)
       toast({
@@ -149,7 +149,7 @@ export function HomePage() {
         />
 
         {!isGenerating && (
-          <QuickTopics onTopicSelect={setTopic} />
+          <ReportHistory />
         )}
 
         {/* Inline Processing Status */}
