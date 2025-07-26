@@ -17,7 +17,7 @@
 Signal News App is a real-time AI-powered news aggregation and synthesis platform that transforms user queries into comprehensive, personalized news reports. The application consists of two main parts:
 
 - **Frontend**: React-based client application built with Vite
-- **Backend**: Express.js server with MongoDB database
+- **Backend**: FastAPI server
 
 ### Key Features
 - Real-time report generation with progress tracking
@@ -47,6 +47,22 @@ Signal News App is a real-time AI-powered news aggregation and synthesis platfor
 - **Mongoose**: MongoDB object modeling
 
 ### Project Structure
+
+The `client/src` directory is organized as follows:
+
+```
+client/src/
+├── api/            # API client modules for backend communication
+├── components/     # Reusable UI components (including Shadcn/ui components in `ui/` subdirectory)
+├── hooks/          # Custom React hooks for encapsulating logic
+├── lib/            # Utility functions and helpers
+├── pages/          # Top-level page components representing different views/pages
+├── types/          # TypeScript type definitions for data structures
+├── App.css         # Global CSS for the application
+├── App.tsx         # Main application component
+├── index.css       # Entry point for global styles
+└── main.tsx        # Application entry point (React DOM rendering)
+```
 
 ### Entry Point (`client/src/main.tsx`)
 The application entry point that renders the root App component:
@@ -224,43 +240,45 @@ The `ui` folder contains Shadcn/ui components that provide:
 - Request/response interceptors
 
 ### Report API (`client/src/api/reports.ts`)
-**Purpose**: Report-related API functions
+**Purpose**: Handles communication with the FastAPI backend for report generation and provides mocked data for other report-related functionalities.
 
 **Functions**:
 
-1. **generateReport(data)**
-   - Simulates report generation with progress callbacks
-   - Returns: Promise<string> (report ID)
-   - Mock: Progressive step updates with delays
+1.  **generateReport(data)**
+    *   **Purpose**: Initiates the news report generation process on the FastAPI backend.
+    *   **Mechanism**:
+        *   Sends an HTTP POST request to `/process_news` to start the job and obtain a `job_id`.
+        *   Establishes a WebSocket connection to `/ws/status/{job_id}` to receive real-time status updates and the final report.
+    *   **Returns**: `Promise<FinalReportData>` (resolves with the final report data once the WebSocket stream completes).
 
-2. **getReport(id)**
-   - Fetches report by ID
-   - Returns: Promise<Report>
-   - Mock: Comprehensive report with sample content
+2.  **getReport(id)**
+    *   **Purpose**: (Currently not implemented for FastAPI backend) This function is a placeholder. The final report is streamed via WebSocket in `generateReport`. If reports are to be persisted and retrieved later, a corresponding backend endpoint and implementation would be required.
+    *   **Returns**: Throws an error indicating it's not implemented.
 
-3. **getReportHistory()**
-   - Gets user's report history
-   - Returns: Promise<Report[]>
-   - Mock: Array of historical reports
+3.  **getReportHistory()**
+    *   **Purpose**: (Currently mocked) Retrieves a list of historical reports.
+    *   **Mock**: Returns a hardcoded array of sample report history data after a delay.
+    *   **Note**: This function would require a backend endpoint for actual implementation.
 
-4. **deleteReport(id)**
-   - Deletes a report
-   - Returns: Promise<{success: boolean, message: string}>
+4.  **deleteReport(id)**
+    *   **Purpose**: (Currently mocked) Deletes a specific report.
+    *   **Mock**: Returns a success message after a delay.
+    *   **Note**: This function would require a backend endpoint for actual implementation.
 
-5. **getTrendingTopics()**
-   - Fetches trending topics
-   - Returns: Promise<TopicItem[]>
-   - Mock: Predefined trending topics with icons
+5.  **getTrendingTopics()**
+    *   **Purpose**: (Currently mocked) Fetches a list of trending news topics.
+    *   **Mock**: Returns a hardcoded array of sample trending topics after a delay.
+    *   **Note**: This function would require a backend endpoint for actual implementation.
 
-6. **getDailyNews()**
-   - Gets daily news articles
-   - Returns: Promise<NewsItem[]>
-   - Mock: Sample news articles with metadata
+6.  **getDailyNews()**
+    *   **Purpose**: (Currently mocked) Fetches daily news articles.
+    *   **Mock**: Returns a hardcoded array of sample daily news items after a delay.
+    *   **Note**: This function would require a backend endpoint for actual implementation.
 
 ### News API (`client/src/api/news.ts`)
-**Purpose**: News-related API functions (duplicate of some report functions)
+**Purpose**: This file currently contains duplicate mocked functions for `getDailyNews` and `getTrendingTopics` that are also present in `reports.ts`.
 
-**Note**: This file contains some duplicate functions from reports.ts and should be consolidated in future refactoring.
+**Note**: It is recommended to consolidate these functions into a single API file (e.g., `reports.ts` or a new `data.ts` if more general data fetching is introduced) to avoid redundancy and improve maintainability. The functions in this file are currently identical to their counterparts in `reports.ts` and serve as mocks.
 
 ## State Management
 

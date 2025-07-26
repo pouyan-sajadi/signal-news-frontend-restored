@@ -1,0 +1,8 @@
+you are in a folder containing my backend and frontend of my app. I want you to go over the readme files in front and backend (because they are the updated ones) not the docs in the root. after reading the readme files, go to frontend folder and check the core functionalities.
+ great now lets go over design, requirements and tasks doc which are the core documents for this project. They   │
+│    are a bit out dated and some previous tasks should be abstracted and concised so that new tasks and steps will  │
+│    be added. the same for design and requirements. no need to talk about the monolethic version before, just talk  │
+│    about the project as it is with this functionalities. My next big step would be working on some features on the │
+│     report history (go over the related parts of the code and write step by step roadmap to implement this feature │
+│     and enabling to save the final report using the already exiting Save botton as pdf. go step by step make sure  │
+│    each is fully done before going to the next one       
