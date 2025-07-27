@@ -20,12 +20,13 @@ export interface ReportPreferences {
 export function HomePage() {
   const [topic, setTopic] = useState("")
   const [preferences, setPreferences] = useState<ReportPreferences>({
-    focus: "General Overview",
-    depth: 3,
-    tone: "Neutral"
+    focus: "Just the Facts",
+    depth: 1,
+    tone: "Express Mode"
   })
   const [isGenerating, setIsGenerating] = useState(false)
   const [processingStep, setProcessingStep] = useState("")
+  const [refinedTopic, setRefinedTopic] = useState("")
   const [progress, setProgress] = useState(0)
   const [currentStepIndex, setCurrentStepIndex] = useState(0)
   const navigate = useNavigate()
@@ -89,14 +90,24 @@ export function HomePage() {
         topic: topic.trim(),
         preferences,
         onProgress: (message: string, progressData?: any) => {
-          console.log("Processing step:", message)
+          console.log("Processing step:", message, progressData)
           setProcessingStep(message)
           
           if (progressData && progressData.step) {
             const stepIndex = steps.findIndex(s => progressData.step.toLowerCase().includes(s.id))
             if (stepIndex !== -1) {
+              // Update current step immediately
               setCurrentStepIndex(stepIndex)
-              setProgress(((stepIndex + 1) / steps.length) * 100)
+
+              // Update refined topic when available
+              if (progressData.refined_topic) {
+                setRefinedTopic(progressData.refined_topic)
+              }
+
+              // Only update progress when a step is completed
+              if (progressData.status === 'completed') {
+                setProgress(((stepIndex + 1) / steps.length) * 100)
+              }
             }
           }
         }
@@ -161,7 +172,7 @@ export function HomePage() {
                 <div>
                   <h3 className="text-xl font-bold">Generating Report</h3>
                   <p className="text-muted-foreground mt-1">
-                    Topic: <span className="font-medium">{topic}</span>
+                    Topic: <span className="font-medium">{refinedTopic || topic}</span>
                   </p>
                 </div>
                 <Button variant="ghost" size="sm" onClick={handleCancelGeneration}>
@@ -175,7 +186,7 @@ export function HomePage() {
                   <span>Progress</span>
                   <span>{Math.round(progress)}%</span>
                 </div>
-                <Progress value={progress} className="h-2" />
+                <Progress value={progress} className="h-2 bg-white dark:bg-slate-700" indicatorClassName="bg-purple-600" />
               </div>
 
               {/* Steps */}

@@ -4,11 +4,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { formatDistanceToNow } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
-import { History, FileText } from "lucide-react";
+import { History, FileText, ChevronDown, ChevronUp } from "lucide-react";
 
 interface HistoricalReport {
   job_id: string;
   topic: string;
+  refined_topic?: string;
   timestamp: string;
   user_preferences: ReportPreferences;
 }
@@ -17,6 +18,7 @@ export function ReportHistory() {
   const [history, setHistory] = useState<HistoricalReport[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isExpanded, setIsExpanded] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -74,35 +76,40 @@ export function ReportHistory() {
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <History className="w-5 h-5" /> Report History
-        </CardTitle>
+      <CardHeader className="cursor-pointer" onClick={() => setIsExpanded(!isExpanded)}>
+        <div className="flex justify-between items-center">
+          <CardTitle className="flex items-center gap-2">
+            <History className="w-5 h-5" /> Report History
+          </CardTitle>
+          {isExpanded ? <ChevronUp /> : <ChevronDown />}
+        </div>
       </CardHeader>
-      <CardContent>
-        {history.length === 0 ? (
-          <p className="text-muted-foreground">No reports generated yet. Generate your first report above!</p>
-        ) : (
-          <div className="space-y-4">
-            {history.map((report) => (
-              <div
-                key={report.job_id}
-                className="flex items-center justify-between p-3 border rounded-md hover:bg-muted/50 transition-colors"
-              >
-                <div>
-                  <p className="font-medium">{report.topic}</p>
-                  <p className="text-sm text-muted-foreground">
-                    Generated {formatDistanceToNow(new Date(report.timestamp), { addSuffix: true })}
-                  </p>
+      {isExpanded && (
+        <CardContent>
+          {history.length === 0 ? (
+            <p className="text-muted-foreground">No reports generated yet. Generate your first report above!</p>
+          ) : (
+            <div className="space-y-4">
+              {history.map((report) => (
+                <div
+                  key={report.job_id}
+                  className="flex items-center justify-between p-3 border rounded-md hover:bg-muted/50 transition-colors"
+                >
+                  <div>
+                    <p className="font-medium">News report on: {report.refined_topic || report.topic}</p>
+                    <p className="text-sm text-muted-foreground">
+                      Generated {formatDistanceToNow(new Date(report.timestamp), { addSuffix: true })}
+                    </p>
+                  </div>
+                  <Button variant="outline" size="sm" onClick={() => handleViewReport(report)}>
+                    <FileText className="w-4 h-4 mr-2" /> View Report
+                  </Button>
                 </div>
-                <Button variant="outline" size="sm" onClick={() => handleViewReport(report)}>
-                  <FileText className="w-4 h-4 mr-2" /> View Report
-                </Button>
-              </div>
-            ))}
-          </div>
-        )}
-      </CardContent>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      )}
     </Card>
   );
 }

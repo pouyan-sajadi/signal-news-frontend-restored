@@ -25,9 +25,9 @@ export function PreferencesPanel({ preferences, onChange }: PreferencesPanelProp
 
   const toneOptions = [
     { value: "Grandma Mode", tooltip: "Warm, wise, and easy-to-understand" },
-    { value: "News with attitude", tooltip: "Sharp, insightful, and conversational" },
     { value: "Gen Z Mode", tooltip: "Real, relevant, and actually interesting" },
-    { value: "Sharp & Snappy", tooltip: "Maximum information density, zero fluff" }
+    { value: "Express Mode", tooltip: "Maximum information density, zero fluff" },
+    { value: "Commentary Mode", tooltip: "Sharp, insightful, and conversational" }
   ]
 
   const depthLabels = {
@@ -39,44 +39,44 @@ export function PreferencesPanel({ preferences, onChange }: PreferencesPanelProp
   const depthTooltips = {
     1: "A brief overview with only the key points.",
     2: "A balanced report with essential information.",
-3: "A comprehensive deep-dive with all available insights."
+    3: "A comprehensive deep-dive with all available insights."
   }
 
   return (
-    <div className="bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm border border-border/50 rounded-lg">
-      <div className="p-4">
-        <Button
-          type="button"
-          variant="ghost"
-          onClick={() => setIsExpanded(!isExpanded)}
-          className="w-full justify-between h-auto p-0"
-        >
-          <div className="flex items-center gap-2">
-            <Settings2 className="h-4 w-4" />
-            <span className="font-medium">Customize Report</span>
-            <div className="flex gap-1">
-              <Badge variant="outline" className="text-xs">
-                {preferences.focus}
-              </Badge>
-              <Badge variant="outline" className="text-xs">
-                {depthLabels[preferences.depth as keyof typeof depthLabels]}
-              </Badge>
-              <Badge variant="outline" className="text-xs">
-                {preferences.tone}
-              </Badge>
+    <TooltipProvider>
+      <div className="bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm border border-border/50 rounded-lg">
+        <div className="p-4">
+          <Button
+            type="button"
+            variant="ghost"
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="w-full justify-between h-auto p-0"
+          >
+            <div className="flex items-center gap-2">
+              <Settings2 className="h-4 w-4" />
+              <span className="font-medium">Customize Report</span>
+              <div className="flex gap-1">
+                <Badge variant="outline" className="text-xs">
+                  {preferences.focus}
+                </Badge>
+                <Badge variant="outline" className="text-xs">
+                  {depthLabels[preferences.depth as keyof typeof depthLabels]}
+                </Badge>
+                <Badge variant="outline" className="text-xs">
+                  {preferences.tone}
+                </Badge>
+              </div>
             </div>
-          </div>
-          {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-        </Button>
+            {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+          </Button>
 
-        {isExpanded && (
-          <div className="mt-6 space-y-6">
-            <div className="grid md:grid-cols-3 gap-6">
-              {/* Focus */}
-              <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <label className="text-sm font-medium">Focus</label>
-                  <TooltipProvider>
+          {isExpanded && (
+            <div className="mt-6 space-y-6">
+              <div className="grid md:grid-cols-3 gap-6">
+                {/* Focus */}
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <label className="text-sm font-medium">Focus</label>
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <HelpCircle className="h-3 w-3 text-muted-foreground cursor-help" />
@@ -85,41 +85,40 @@ export function PreferencesPanel({ preferences, onChange }: PreferencesPanelProp
                         <p className="text-xs">Choose the main perspective for your report</p>
                       </TooltipContent>
                     </Tooltip>
-                  </TooltipProvider>
+                  </div>
+                  <Select
+                    value={preferences.focus}
+                    onValueChange={(value) => onChange({ ...preferences, focus: value })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {focusOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          <div className="flex items-center justify-between w-full">
+                            <span>{option.value}</span>
+                            <Tooltip>
+                              <TooltipTrigger>
+                                <HelpCircle className="h-3 w-3 text-muted-foreground cursor-help ml-2" />
+                              </TooltipTrigger>
+                              <TooltipContent className="z-[99]">
+                                <p className="text-xs">{option.tooltip}</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
-                <Select
-                  value={preferences.focus}
-                  onValueChange={(value) => onChange({ ...preferences, focus: value })}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {focusOptions.map((option) => (
-                      <SelectItem key={option.value} value={option.value}>
-                        <TooltipProvider>
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <span>{option.value}</span>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p className="text-xs">{option.tooltip}</p>
-                            </TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
 
-              {/* Depth */}
-              <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <label className="text-sm font-medium">
-                    Depth: {depthLabels[preferences.depth as keyof typeof depthLabels]}
-                  </label>
-                  <TooltipProvider>
+                {/* Depth */}
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <label className="text-sm font-medium">
+                      Depth: {depthLabels[preferences.depth as keyof typeof depthLabels]}
+                    </label>
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <HelpCircle className="h-3 w-3 text-muted-foreground cursor-help" />
@@ -128,29 +127,27 @@ export function PreferencesPanel({ preferences, onChange }: PreferencesPanelProp
                         <p className="text-xs">{depthTooltips[preferences.depth as keyof typeof depthTooltips]}</p>
                       </TooltipContent>
                     </Tooltip>
-                  </TooltipProvider>
-                </div>
-                <div className="px-2">
-                  <Slider
-                    value={[preferences.depth]}
-                    onValueChange={(value) => onChange({ ...preferences, depth: value[0] })}
-                    min={1}
-                    max={3}
-                    step={1}
-                    className="w-full"
-                  />
-                  <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                    <span>Quick</span>
-                    <span>Deep</span>
+                  </div>
+                  <div className="px-2">
+                    <Slider
+                      value={[preferences.depth]}
+                      onValueChange={(value) => onChange({ ...preferences, depth: value[0] })}
+                      min={1}
+                      max={3}
+                      step={1}
+                      className="w-full"
+                    />
+                    <div className="flex justify-between text-xs text-muted-foreground mt-1">
+                      <span>Quick</span>
+                      <span>Deep</span>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Tone */}
-              <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <label className="text-sm font-medium">Tone</label>
-                  <TooltipProvider>
+                {/* Tone */}
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <label className="text-sm font-medium">Tone</label>
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <HelpCircle className="h-3 w-3 text-muted-foreground cursor-help" />
@@ -159,37 +156,38 @@ export function PreferencesPanel({ preferences, onChange }: PreferencesPanelProp
                         <p className="text-xs">Select the writing style for your report</p>
                       </TooltipContent>
                     </Tooltip>
-                  </TooltipProvider>
+                  </div>
+                  <Select
+                    value={preferences.tone}
+                    onValueChange={(value) => onChange({ ...preferences, tone: value })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {toneOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          <div className="flex items-center justify-between w-full">
+                            <span>{option.value}</span>
+                            <Tooltip>
+                              <TooltipTrigger>
+                                <HelpCircle className="h-3 w-3 text-muted-foreground cursor-help ml-2" />
+                              </TooltipTrigger>
+                              <TooltipContent className="z-[99]">
+                                <p className="text-xs">{option.tooltip}</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
-                <Select
-                  value={preferences.tone}
-                  onValueChange={(value) => onChange({ ...preferences, tone: value })}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {toneOptions.map((option) => (
-                      <SelectItem key={option.value} value={option.value}>
-                        <TooltipProvider>
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <span>{option.value}</span>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p className="text-xs">{option.tooltip}</p>
-                            </TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
               </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
-    </div>
+    </TooltipProvider>
   )
 }

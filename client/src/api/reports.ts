@@ -51,6 +51,12 @@ export const generateReport = async (data: {
           data.onProgress(message.message || `Step: ${message.step}, Status: ${message.status}`, message);
         }
 
+        if (message.status === 'completed' && message.step === 'search') {
+          if (data.onProgress) {
+            data.onProgress(`Found ${message.data.length} articles.`, { ...message, refined_topic: message.refined_topic });
+          }
+        }
+
         if (message.status === 'completed' && message.step === 'editing') {
           // Final report received
           resolve({job_id, finalReport: message.data as FinalReportData});

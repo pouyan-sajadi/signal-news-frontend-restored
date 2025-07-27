@@ -16,6 +16,7 @@ import html2pdf from 'html2pdf.js';
 export interface Report {
   job_id: string;
   topic: string;
+  refined_topic?: string; // Make it optional for backward compatibility
   user_preferences: {
     focus: string;
     depth: number;
@@ -89,26 +90,80 @@ export function ReportPage() {
       return;
     }
 
-    const element = document.getElementById("report-content");
-    if (element) {
-      html2pdf().from(element).set({
-        margin: [10, 10, 10, 10],
-        filename: `${report.topic.replace(/\s+/g, "_").toLowerCase()}_report.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, logging: true, dpi: 192, letterRendering: true },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-      }).save();
-      toast({
-        title: "Export Started",
-        description: "Your report is being generated as a PDF.",
-      });
-    } else {
+    const reportContentElement = document.getElementById("report-content");
+    if (!reportContentElement) {
       toast({
         title: "Export Failed",
         description: "Could not find report content to export.",
         variant: "destructive",
       });
+      return;
     }
+
+    // Create a new container for the PDF content
+    const pdfContainer = document.createElement("div");
+    pdfContainer.style.padding = "20px";
+    pdfContainer.style.fontFamily = "Arial, sans-serif";
+
+    // 1. Add Title
+    const title = document.createElement("h1");
+    title.textContent = `The Signal Report: ${report.topic}`;
+    title.style.color = "#333";
+    title.style.borderBottom = "2px solid #eee";
+    title.style.paddingBottom = "10px";
+    title.style.marginBottom = "10px";
+    pdfContainer.appendChild(title);
+
+    // 2. Add Generation Timestamp
+    const timestamp = document.createElement("p");
+    timestamp.textContent = `Generated on: ${new Date(report.timestamp).toLocaleString()}`;
+    timestamp.style.fontSize = "12px";
+    timestamp.style.color = "#666";
+    timestamp.style.marginBottom = "20px";
+    pdfContainer.appendChild(timestamp);
+
+    // 3. Add Preference Tags
+    const tagsContainer = document.createElement("div");
+    tagsContainer.style.marginBottom = "20px";
+    
+    const createTag = (text: string) => {
+      const tag = document.createElement("span");
+      tag.textContent = text;
+      tag.style.backgroundColor = "#e0e0e0";
+      tag.style.color = "#333";
+      tag.style.padding = "5px 10px";
+      tag.style.marginRight = "10px";
+      tag.style.borderRadius = "15px";
+      tag.style.fontSize = "12px";
+      return tag;
+    };
+
+    tagsContainer.appendChild(createTag(report.user_preferences.focus));
+    tagsContainer.appendChild(createTag(`Depth: ${report.user_preferences.depth}/3`));
+    tagsContainer.appendChild(createTag(report.user_preferences.tone));
+    pdfContainer.appendChild(tagsContainer);
+
+    // 4. Clone the report content and remove the progress bar
+    const clonedContent = reportContentElement.cloneNode(true) as HTMLElement;
+    const progressBar = clonedContent.querySelector(".p-4.border-b");
+    if (progressBar) {
+      progressBar.remove();
+    }
+    pdfContainer.appendChild(clonedContent);
+
+    // Generate PDF from the new container
+    html2pdf().from(pdfContainer).set({
+      margin: [15, 15, 15, 15],
+      filename: `${report.topic.replace(/\s+/g, "_").toLowerCase()}_report.pdf`,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2, logging: true, dpi: 192, letterRendering: true },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    }).save();
+
+    toast({
+      title: "Export Started",
+      description: "Your report is being generated as a PDF.",
+    });
   };
 
   if (loading) {
@@ -173,7 +228,7 @@ export function ReportPage() {
       <Card className="p-6 mb-8 bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm border-0 shadow-lg">
         <div className="space-y-4">
           <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-            The Signal Report: {report.topic}
+            The gist of what was found on "{report.refined_topic || report.topic}"
           </h1>
           
           <div className="flex flex-wrap gap-2">
@@ -204,7 +259,7 @@ export function ReportPage() {
       )}
 
       {/* Report Content */}
-      <div className="mb-8">
+      <div id="report-content" className="mb-8">
         <ReportContent content={report.final_report_data.editing} />
       </div>
 
