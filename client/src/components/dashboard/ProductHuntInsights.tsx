@@ -1,42 +1,20 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts'
-import { Rocket, ArrowUp } from 'lucide-react'
+import { Rocket, ExternalLink } from 'lucide-react'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { Badge } from '@/components/ui/badge'
 
 interface ProductHuntInsightsProps {
   data: {
-    categories: Array<{
-      name: string
-      upvotes: number
-      products: number
+    product_details: Array<{
+      title: string
+      url: string
+      topic: string
     }>
   } | null
 }
 
 export function ProductHuntInsights({ data }: ProductHuntInsightsProps) {
   if (!data) return null
-
-  const chartData = data.categories.slice(0, 6).map(category => ({
-    ...category,
-    shortName: category.name.length > 12 ? category.name.substring(0, 12) + '...' : category.name
-  }))
-
-  const CustomTooltip = ({ active, payload, label }: any) => {
-    if (active && payload && payload.length) {
-      const data = payload[0].payload
-      return (
-        <div className="bg-white/95 backdrop-blur-sm border border-gray-200 rounded-lg p-3 shadow-lg">
-          <p className="font-semibold text-gray-900">{data.name}</p>
-          <p className="text-sm text-gray-600">
-            {data.upvotes.toLocaleString()} upvotes
-          </p>
-          <p className="text-sm text-gray-600">
-            {data.products} products
-          </p>
-        </div>
-      )
-    }
-    return null
-  }
 
   return (
     <Card className="h-full bg-white/70 backdrop-blur-sm border-0 shadow-xl hover:shadow-2xl transition-all duration-300">
@@ -45,42 +23,32 @@ export function ProductHuntInsights({ data }: ProductHuntInsightsProps) {
           <div className="p-2 bg-gradient-to-r from-orange-500 to-red-500 rounded-lg">
             <Rocket className="h-5 w-5 text-white" />
           </div>
-          Market Launch Trends
+          Product Hunt Insights
         </CardTitle>
-        <p className="text-sm text-gray-600">Product Hunt category performance</p>
+        <p className="text-sm text-gray-600">Latest product launches and trends</p>
       </CardHeader>
-      <CardContent className="pt-0">
-        <div className="h-64">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-              <XAxis 
-                dataKey="shortName" 
-                tick={{ fontSize: 12 }}
-                angle={-45}
-                textAnchor="end"
-                height={60}
-              />
-              <YAxis tick={{ fontSize: 12 }} />
-              <Tooltip content={<CustomTooltip />} />
-              <Bar 
-                dataKey="upvotes" 
-                fill="url(#productHuntGradient)"
-                radius={[4, 4, 0, 0]}
-                className="hover:opacity-80 transition-opacity"
-              />
-              <defs>
-                <linearGradient id="productHuntGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#f97316" stopOpacity={0.8}/>
-                  <stop offset="95%" stopColor="#ea580c" stopOpacity={0.6}/>
-                </linearGradient>
-              </defs>
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-        <div className="mt-4 flex items-center gap-2 text-sm text-gray-600">
-          <ArrowUp className="h-4 w-4 text-green-500" />
-          <span>AI Tools leading with {data.categories[0]?.upvotes.toLocaleString()} upvotes</span>
-        </div>
+      <CardContent className="pt-0 h-[calc(100%-100px)]">
+        <ScrollArea className="h-full pr-4">
+          <div className="space-y-3">
+            {data.product_details.map((product, index) => (
+              <div
+                key={index}
+                className="group p-3 rounded-lg bg-white/50 hover:bg-white/80 transition-all duration-200 cursor-pointer border border-gray-100 hover:border-gray-200"
+                onClick={() => window.open(product.url, '_blank')}
+              >
+                <div className="flex items-start justify-between gap-2 mb-1">
+                  <h3 className="font-semibold text-gray-900 text-sm leading-tight group-hover:text-orange-600 transition-colors">
+                    {product.title}
+                  </h3>
+                  <ExternalLink className="h-4 w-4 text-gray-400 group-hover:text-orange-500 transition-colors flex-shrink-0" />
+                </div>
+                <Badge variant="secondary" className="text-xs bg-orange-100 text-orange-700">
+                  {product.topic}
+                </Badge>
+              </div>
+            ))}
+          </div>
+        </ScrollArea>
       </CardContent>
     </Card>
   )

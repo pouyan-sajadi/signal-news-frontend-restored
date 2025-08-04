@@ -10,7 +10,7 @@ interface TechZeitgeistProps {
       word: string
       frequency: number
       trend: string
-      overview: string
+      desc: string
     }>
   } | null
 }
@@ -72,7 +72,7 @@ export function TechZeitgeist({ data }: TechZeitgeistProps) {
                     <Badge
                       variant="outline"
                       className={`${getTrendColor(keyword.trend)} ${getWordSize(keyword.frequency, maxFrequency)}
-                        transition-all duration-200 cursor-pointer border flex items-center gap-1 px-3 py-1`}
+                        transition-all duration-200 cursor-pointer border flex items-center gap-1 px-3 py-1`} 
                       title={`${keyword.frequency.toLocaleString()} mentions`}
                     >
                       {getTrendIcon(keyword.trend)}
@@ -83,7 +83,7 @@ export function TechZeitgeist({ data }: TechZeitgeistProps) {
                     <div className="p-2">
                       <p className="font-semibold text-gray-900 mb-1">{keyword.word}</p>
                       <p className="text-sm text-gray-600 mb-2">
-                        {keyword.overview}
+                        {keyword.desc}
                       </p>
                       <p className="text-xs text-gray-500">
                         {keyword.frequency.toLocaleString()} mentions
@@ -102,4 +102,3 @@ export function TechZeitgeist({ data }: TechZeitgeistProps) {
       </CardContent>
     </Card>
   )
-}

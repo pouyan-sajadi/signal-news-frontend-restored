@@ -6,7 +6,7 @@ import { formatDistanceToNow } from 'date-fns'
 
 interface DailyNewsBriefProps {
   data: {
-    articles: Array<{
+    hot_topics: Array<{
       title: string
       url: string
       source: string
@@ -41,30 +41,30 @@ export function DailyNewsBrief({ data }: DailyNewsBriefProps) {
       <CardContent className="pt-0 h-[calc(100%-120px)]">
         <ScrollArea className="h-full pr-4">
           <div className="space-y-4">
-            {data.articles.map((article, index) => (
+            {data.hot_topics.map((topic, index) => (
               <div
                 key={index}
                 className="group p-4 rounded-lg bg-white/50 hover:bg-white/80 transition-all duration-200 cursor-pointer border border-gray-100 hover:border-gray-200"
-                onClick={() => window.open(article.url, '_blank')}
+                onClick={() => window.open(topic.url, '_blank')}
               >
                 <div className="flex items-start justify-between gap-3 mb-2">
                   <h3 className="font-semibold text-gray-900 text-sm leading-tight group-hover:text-blue-600 transition-colors">
-                    {article.title}
+                    {topic.title}
                   </h3>
                   <ExternalLink className="h-4 w-4 text-gray-400 group-hover:text-blue-500 transition-colors flex-shrink-0" />
                 </div>
                 
                 <p className="text-xs text-gray-600 mb-3 leading-relaxed">
-                  {article.summary}
+                  {topic.summary}
                 </p>
                 
                 <div className="flex items-center justify-between">
                   <Badge variant="secondary" className="text-xs bg-gray-100 text-gray-700">
-                    {article.source}
+                    {topic.source}
                   </Badge>
                   <div className="flex items-center gap-1 text-xs text-gray-500">
                     <Clock className="h-3 w-3" />
-                    {formatTimeAgo(article.publishedAt)}
+                    {formatTimeAgo(topic.publishedAt)}
                   </div>
                 </div>
               </div>

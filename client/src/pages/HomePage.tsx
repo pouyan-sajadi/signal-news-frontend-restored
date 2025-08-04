@@ -144,7 +144,6 @@ export function HomePage() {
       <div className="mt-8">
         <Dashboard />
       </div>
-
       <GenerateReport
         topic={topic}
         setTopic={setTopic}

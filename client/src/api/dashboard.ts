@@ -17,14 +17,14 @@ export const getDashboardData = async () => {
         })),
       },
       productHunt: {
-        categories: pulseData.product_hunt_tag_connections.nodes.map((node: any) => ({
-          name: node.name,
-          upvotes: Math.floor(Math.random() * 5000), // Mocked data
-          products: Math.floor(Math.random() * 100), // Mocked data
+        product_details: pulseData.product_hunt_tag_connections.product_details.map((product: any) => ({
+          title: product.title,
+          url: product.url,
+          topic: product.topic,
         })),
       },
       news: {
-        articles: pulseData.news_word_cloud.hot_topics.map((topic: any) => ({
+        hot_topics: pulseData.news_word_cloud.hot_topics.map((topic: any) => ({
           title: topic.topic,
           url: '#',
           source: 'Signal News',
@@ -37,7 +37,7 @@ export const getDashboardData = async () => {
           word: keyword.text,
           frequency: keyword.value,
           trend: 'up', // Mocked data
-          overview: pulseData.news_word_cloud.hot_topics.find((topic: any) => topic.topic.toLowerCase().includes(keyword.text.toLowerCase()))?.summary || `An overview for ${keyword.text}`,
+          desc: keyword.desc,
         })),
       },
       predictions: {
