@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { getReportHistory, ReportPreferences } from "../../api/reports";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { formatDistanceToNow } from "date-fns";
+import { format, formatDistanceToNow, isToday } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
 import { History, FileText, ChevronDown, ChevronUp } from "lucide-react";
@@ -39,6 +39,34 @@ export function ReportHistory() {
     fetchHistory();
   }, []);
 
+  const formatTimestamp = (timestamp: string) => {
+    const date = new Date(timestamp); // This is now correctly parsed as UTC
+    const now = new Date(); // Get current local time
+    const nowUtc = new Date(now.toUTCString()); // Convert current local time to UTC Date object
+
+    const diffMs = nowUtc.getTime() - date.getTime(); // Calculate difference using UTC times
+    const diffMinutes = Math.round(Math.abs(diffMs) / (1000 * 60));
+    const diffHours = Math.floor(Math.abs(diffMs) / (1000 * 60 * 60));
+
+    // To check if 'date' is "today" in UTC:
+    const isSameUtcCalendarDay = date.getUTCFullYear() === nowUtc.getUTCFullYear() &&
+                                 date.getUTCMonth() === nowUtc.getUTCMonth() &&
+                                 date.getUTCDate() === nowUtc.getUTCDate();
+
+    // Case 1: Less than 60 minutes ago
+    if (diffMinutes < 60) {
+      return `${diffMinutes} ${diffMinutes === 1 ? 'minute' : 'minutes'} ago`;
+    } 
+    // Case 2: Over 60 minutes but within the same calendar day (UTC)
+    else if (isSameUtcCalendarDay) {
+      return `${diffHours} ${diffHours === 1 ? 'hour' : 'hours'} ago`;
+    } 
+    // Case 3: Not within the same calendar day (UTC)
+    else {
+      return format(date, "MMM dd, yyyy"); // This will still format in local time for display
+    }
+  };
+
   const handleViewReport = (report: HistoricalReport) => {
     // Navigate to the report page, passing the job_id
     navigate(`/report/${report.job_id}`);
@@ -75,7 +103,7 @@ export function ReportHistory() {
   }
 
   return (
-    <Card>
+    <Card id="report-history-section">
       <CardHeader className="cursor-pointer" onClick={() => setIsExpanded(!isExpanded)}>
         <div className="flex justify-between items-center">
           <CardTitle className="flex items-center gap-2">
@@ -98,7 +126,7 @@ export function ReportHistory() {
                   <div>
                     <p className="font-medium">News report on: {report.refined_topic || report.topic}</p>
                     <p className="text-sm text-muted-foreground">
-                      Generated {formatDistanceToNow(new Date(report.timestamp), { addSuffix: true })}
+                      Generated {formatTimestamp(report.timestamp)}
                     </p>
                   </div>
                   <Button variant="outline" size="sm" onClick={() => handleViewReport(report)}>

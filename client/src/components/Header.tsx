@@ -1,4 +1,4 @@
-import { Newspaper, History, Settings } from "lucide-react"
+import { Newspaper, History, Settings, LayoutDashboard } from "lucide-react"
 import { Button } from "./ui/button"
 import { ThemeToggle } from "./ui/theme-toggle"
 import { useNavigate } from "react-router-dom"
@@ -19,7 +19,16 @@ export function Header() {
           </span>
         </div>
         <div className="flex items-center gap-4">
-          <Button variant="ghost" size="sm" className="gap-2">
+          <Button variant="ghost" size="sm" className="gap-2" onClick={() => navigate("/dashboard")}>
+            <LayoutDashboard className="h-4 w-4" />
+            Dashboard
+          </Button>
+          <Button variant="ghost" size="sm" className="gap-2" onClick={() => {
+            const element = document.getElementById("report-history-section");
+            if (element) {
+              element.scrollIntoView({ behavior: "smooth" });
+            }
+          }}>
             <History className="h-4 w-4" />
             History
           </Button>

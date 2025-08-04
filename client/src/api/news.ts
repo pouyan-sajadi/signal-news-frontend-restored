@@ -134,3 +134,12 @@ export const getTrendingTopics = async () => {
   //   throw new Error(error?.response?.data?.message || error.message);
   // }
 };
+
+export const getTechPulse = async () => {
+  try {
+    const response = await api.get('/api/tech-pulse/latest');
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error?.response?.data?.message || error.message);
+  }
+};

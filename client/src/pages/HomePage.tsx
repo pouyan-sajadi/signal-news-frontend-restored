@@ -150,6 +150,14 @@ export function HomePage() {
         )}
 
         {/* Topic Input with Integrated Preferences */}
+        <div className="text-center mb-8">
+          <h2 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-3">
+            Generate News Report
+          </h2>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Enter any topic to get a comprehensive, AI-generated news analysis with real-time processing updates.
+          </p>
+        </div>
         <TopicInput
           value={topic}
           onChange={setTopic}
@@ -160,7 +168,7 @@ export function HomePage() {
         />
 
         {!isGenerating && (
-          <ReportHistory />
+          <ReportHistory id="report-history-section" />
         )}
 
         {/* Inline Processing Status */}
