@@ -34,7 +34,7 @@ export function DailyNewsBrief({ data }: DailyNewsBriefProps) {
           <div className="p-2 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-lg">
             <Newspaper className="h-5 w-5 text-white" />
           </div>
-          Daily News Brief
+          Intelligent News Brief
         </CardTitle>
         <p className="text-sm text-gray-600">Latest technology headlines</p>
       </CardHeader>
@@ -48,10 +48,9 @@ export function DailyNewsBrief({ data }: DailyNewsBriefProps) {
                 onClick={() => window.open(topic.url, '_blank')}
               >
                 <div className="flex items-start justify-between gap-3 mb-2">
-                  <h3 className="font-semibold text-gray-900 text-sm leading-tight group-hover:text-blue-600 transition-colors">
+                  <h3 className="font-semibold text-gray-900 text-sm leading-tight">
                     {topic.title}
                   </h3>
-                  <ExternalLink className="h-4 w-4 text-gray-400 group-hover:text-blue-500 transition-colors flex-shrink-0" />
                 </div>
                 
                 <p className="text-xs text-gray-600 mb-3 leading-relaxed">

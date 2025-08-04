@@ -108,7 +108,7 @@ export function MarketPredictions({ data }: MarketPredictionsProps) {
                 tick={{ fontSize: 12 }}
               />
               <Tooltip content={<CustomTooltip />} />
-              <Scatter data={chartData} fill="#8884d8">
+              <Scatter data={chartData}>
                 {chartData.map((entry, index) => (
                   <Cell
                     key={`cell-${index}`}

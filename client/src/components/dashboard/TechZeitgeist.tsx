@@ -72,9 +72,7 @@ export function TechZeitgeist({ data }: TechZeitgeistProps) {
                     <Badge
                       variant="outline"
                       className={`${getTrendColor(keyword.trend)} ${getWordSize(keyword.frequency, maxFrequency)}
-                        transition-all duration-200 cursor-pointer border flex items-center gap-1 px-3 py-1`} 
-                      title={`${keyword.frequency.toLocaleString()} mentions`}
-                    >
+                        transition-all duration-200 cursor-pointer border flex items-center gap-1 px-3 py-1`} >
                       {getTrendIcon(keyword.trend)}
                       {keyword.word}
                     </Badge>
