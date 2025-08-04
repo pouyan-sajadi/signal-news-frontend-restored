@@ -22,7 +22,7 @@ Signal News App is a real-time AI-powered news aggregation and synthesis platfor
 ### Key Features
 - Real-time report generation with progress tracking
 - Customizable report preferences (focus, depth, tone)
-- Daily news dashboard
+- Enhanced Daily News Dashboard
 - Trending topics suggestions
 - Report history and sharing
 - Responsive design with dark/light theme support

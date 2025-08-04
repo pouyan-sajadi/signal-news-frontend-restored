@@ -33,7 +33,7 @@ export function TopicInput({
   }
 
   return (
-    <Card className="p-6 bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm border-0 shadow-lg">
+    <Card className="p-6 bg-white/70 dark:bg-slate-800/70 border-0 shadow-lg">
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />

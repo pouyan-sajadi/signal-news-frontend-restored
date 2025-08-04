@@ -5,7 +5,6 @@ import { Layout } from "./components/Layout"
 import { HomePage } from "./pages/HomePage"
 import { ReportPage } from "./pages/ReportPage"
 import { BlankPage } from "./pages/BlankPage"
-import DashboardPage from "./pages/DashboardPage"
 
 function App() {
   return (
@@ -15,7 +14,6 @@ function App() {
           <Route path="/" element={<Layout />}>
             <Route index element={<HomePage />} />
             <Route path="/report/:id" element={<ReportPage />} />
-            <Route path="/dashboard" element={<DashboardPage />} />
           </Route>
           <Route path="*" element={<BlankPage />} />
         </Routes>
