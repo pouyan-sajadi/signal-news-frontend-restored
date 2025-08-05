@@ -44,7 +44,7 @@ export const getDashboardData = async () => {
         predictions: pulseData.manifold_predictions_bubble_plot.datasets[0].data.map((prediction: any) => ({
           question: prediction.label,
           probability: Math.round(prediction.x * 100),
-          traderInterest: Math.round(prediction.y / 1000),
+          traderInterest: prediction.y,
           category: prediction.category,
         })),
       },

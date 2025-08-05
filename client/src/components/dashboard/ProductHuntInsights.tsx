@@ -18,7 +18,7 @@ export function ProductHuntInsights({ data }: ProductHuntInsightsProps) {
 
   return (
     <Card className="h-full bg-white/70 backdrop-blur-sm border-0 shadow-xl hover:shadow-2xl transition-all duration-300">
-      <CardHeader className="pb-2">
+      <CardHeader className="pb-1">
         <CardTitle className="flex items-center gap-2 text-lg font-bold text-gray-800">
           <div className="p-2 bg-gradient-to-r from-orange-500 to-red-500 rounded-lg">
             <Rocket className="h-5 w-5 text-white" />
@@ -27,8 +27,8 @@ export function ProductHuntInsights({ data }: ProductHuntInsightsProps) {
         </CardTitle>
         <p className="text-sm text-gray-600">Latest product launches and trends</p>
       </CardHeader>
-      <CardContent className="pt-0 h-[calc(100%-100px)]">
-        <ScrollArea className="h-full pr-4">
+      <CardContent className="pt-1 h-[calc(100%-100px)]">
+        <ScrollArea className="h-full pr-2">
           <div className="space-y-3">
             {data.product_details.map((product, index) => (
               <div

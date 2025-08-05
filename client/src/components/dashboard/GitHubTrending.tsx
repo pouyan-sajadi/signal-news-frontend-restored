@@ -83,7 +83,7 @@ export function GitHubTrending({ data }: GitHubTrendingProps) {
   return (
     <>
       <Card className="h-full bg-white/70 backdrop-blur-sm border-0 shadow-xl hover:shadow-2xl transition-all duration-300">
-        <CardHeader className="pb-2">
+        <CardHeader className="pb-1">
           <CardTitle className="flex items-center gap-2 text-lg font-bold text-gray-800">
             <div className="p-2 bg-gradient-to-r from-purple-500 to-blue-500 rounded-lg">
               <GitBranch className="h-5 w-5 text-white" />
@@ -92,7 +92,7 @@ export function GitHubTrending({ data }: GitHubTrendingProps) {
           </CardTitle>
           <p className="text-sm text-gray-600">Trending programming languages</p>
         </CardHeader>
-        <CardContent className="pt-0">
+        <CardContent className="pt-1">
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>

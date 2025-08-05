@@ -29,7 +29,7 @@ export function DailyNewsBrief({ data }: DailyNewsBriefProps) {
 
   return (
     <Card className="h-full bg-white/70 backdrop-blur-sm border-0 shadow-xl hover:shadow-2xl transition-all duration-300">
-      <CardHeader className="pb-4">
+      <CardHeader className="pb-2">
         <CardTitle className="flex items-center gap-2 text-lg font-bold text-gray-800">
           <div className="p-2 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-lg">
             <Newspaper className="h-5 w-5 text-white" />
@@ -38,8 +38,8 @@ export function DailyNewsBrief({ data }: DailyNewsBriefProps) {
         </CardTitle>
         <p className="text-sm text-gray-600">Latest technology headlines</p>
       </CardHeader>
-      <CardContent className="pt-0 h-[calc(100%-120px)]">
-        <ScrollArea className="h-full pr-4">
+      <CardContent className="pt-1 h-[calc(100%-120px)]">
+        <ScrollArea className="h-full pr-2">
           <div className="space-y-4">
             {data.hot_topics.map((topic, index) => (
               <div

@@ -47,7 +47,7 @@ export function Dashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-[50vh] bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100 p-6">
+      <div className="min-h-[50vh] bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100 p-4">
         <div className="w-full">
           <div className="mb-8">
             <Skeleton className="h-12 w-96 mb-4" />
