@@ -19,17 +19,51 @@ export function MarketPredictions({ data }: MarketPredictionsProps) {
 
   const getCategoryColor = (category: string) => {
     const colors = {
-      'AI': '#8b5cf6',
-      'Hardware': '#06b6d4',
-      'Automotive': '#10b981',
-      'Quantum': '#f59e0b',
-      'VR/AR': '#ef4444',
-      'Crypto': '#f97316',
-      'M&A': '#6366f1',
-      'Telecom': '#84cc16',
-      'Web3': '#ec4899'
+      'AI': '#8b5cf6', // Purple
+      'Hardware': '#06b6d4', // Cyan
+      'Automotive': '#10b981', // Emerald
+      'Quantum': '#f59e0b', // Amber
+      'VR/AR': '#ef4444', // Red
+      'Crypto': '#f97316', // Orange
+      'M&A': '#6366f1', // Indigo
+      'Telecom': '#84cc16', // Lime
+      'Web3': '#ec4899', // Pink
+      'Biotech': '#3b82f6', // Blue
+      'Energy': '#a855f7', // Violet
+      'Space': '#14b8a6', // Teal
+      'Robotics': '#eab308', // Yellow
+      'Cybersecurity': '#db2777', // Rose
+      'Health': '#1d4ed8', // Darker Blue
+      'Finance': '#ca8a04', // Darker Amber
+      'Education': '#059669', // Green
+      'Gaming': '#9333ea', // Purple
+      'Food': '#d97706', // Orange
+      'Travel': '#14b8a6', // Teal
+      'Fashion': '#be185d', // Rose
+      'Real Estate': '#6d28d9', // Violet
+      'Media': '#ef4444', // Red
+      'Sports': '#3b82f6', // Blue
+      'Music': '#c026d3', // Fuchsia
+      'Art': '#e11d48', // Red-500
+      'Environment': '#16a34a', // Green-600
+      'Government': '#4f46e5', // Indigo-600
+      'Retail': '#ea580c', // Orange-600
+      'Agriculture': '#65a30d', // Lime-600
+      'Manufacturing': '#a21caf', // Purple-600
+      'Logistics': '#0891b2', // Cyan-600
+      'Consulting': '#7c2d12', // Amber-800
+      'Legal': '#4338ca', // Indigo-700
+      'Marketing': '#d946ef', // Fuchsia-500
+      'Human Resources': '#f43f5e', // Rose-500
+      'Non-profit': '#22c55e', // Green-500
+      'Other': '#64748b', // Slate-600
+      'AI utils': '#8b5cf6', // Purple
+      'Technology (General)': '#06b6d4', // Cyan
+      'Blockchain/Crypto': '#f97316', // Orange
+      'Politics/Society': '#ef4444', // Red
+      'Economics/Finance': '#ca8a04', // Darker Amber
     }
-    return colors[category as keyof typeof colors] || '#6b7280'
+    return colors[category as keyof typeof colors] || '#10b981' // A distinct green as a more visible default
   }
 
   // Data Transformation
@@ -114,7 +148,7 @@ export function MarketPredictions({ data }: MarketPredictionsProps) {
       <CardContent className="pt-1">
         <div className="h-48">
           <ResponsiveContainer width="100%" height="100%">
-            <ScatterChart margin={{ top: 30, right: 10, bottom: 30, left: 50 }}>
+            <ScatterChart margin={{ top: 15, right: 5, bottom: 5, left: 40 }}>
               <XAxis
                 type="number"
                 dataKey="x"
@@ -132,6 +166,7 @@ export function MarketPredictions({ data }: MarketPredictionsProps) {
                 tickFormatter={formatYAxisTick}
                 name="Total Money Invested (Log Scale)"
                 tick={{ fontSize: 12 }}
+                label={{ value: "Total Money Invested", angle: -90, position: 'insideLeft', dx: 0, dy: 60, fill: '#64748b', fontSize: 12 }}
               />
               <ReferenceLine x={0} stroke="#e2e8f0" strokeDasharray="3 3" label={{ value: 'High Controversy', position: 'top', fill: '#64748b', fontSize: 10 }} />
               <Tooltip content={<CustomTooltip />} cursor={{ strokeDasharray: '3 3' }} />
