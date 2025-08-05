@@ -102,7 +102,7 @@ export function PreferencesPanel({ preferences, onChange }: PreferencesPanelProp
                               <TooltipTrigger>
                                 <HelpCircle className="h-3 w-3 text-muted-foreground cursor-help ml-2" />
                               </TooltipTrigger>
-                              <TooltipContent className="z-[99]">
+                              <TooltipContent>
                                 <p className="text-xs">{option.tooltip}</p>
                               </TooltipContent>
                             </Tooltip>
@@ -173,7 +173,7 @@ export function PreferencesPanel({ preferences, onChange }: PreferencesPanelProp
                               <TooltipTrigger>
                                 <HelpCircle className="h-3 w-3 text-muted-foreground cursor-help ml-2" />
                               </TooltipTrigger>
-                              <TooltipContent className="z-[99]">
+                              <TooltipContent>
                                 <p className="text-xs">{option.tooltip}</p>
                               </TooltipContent>
                             </Tooltip>

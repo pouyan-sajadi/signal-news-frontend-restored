@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { HeroSection } from "../components/home/HeroSection"
 import { Dashboard } from "./Dashboard"
 import { GenerateReport } from "../components/home/GenerateReport";
+import { ReportHistory } from "../components/home/ReportHistory";
 import { generateReport, FinalReportData } from "../api/reports"
 import { useToast } from "../hooks/useToast"
 import { Card } from "../components/ui/card"
@@ -144,19 +145,24 @@ export function HomePage() {
       <div className="mt-8">
         <Dashboard />
       </div>
-      <GenerateReport
-        topic={topic}
-        setTopic={setTopic}
-        preferences={preferences}
-        setPreferences={setPreferences}
-        isGenerating={isGenerating}
-        handleGenerateReport={handleGenerateReport}
-        progress={progress}
-        currentStepIndex={currentStepIndex}
-        refinedTopic={refinedTopic}
-        processingStep={processingStep}
-        handleCancelGeneration={handleCancelGeneration}
-      />
+      <div className="mt-12">
+        <GenerateReport
+          topic={topic}
+          setTopic={setTopic}
+          preferences={preferences}
+          setPreferences={setPreferences}
+          isGenerating={isGenerating}
+          handleGenerateReport={handleGenerateReport}
+          progress={progress}
+          currentStepIndex={currentStepIndex}
+          refinedTopic={refinedTopic}
+          processingStep={processingStep}
+          handleCancelGeneration={handleCancelGeneration}
+        />
+        <div className="mt-12">
+          <ReportHistory />
+        </div>
+      </div>
     </div>
   )
 }

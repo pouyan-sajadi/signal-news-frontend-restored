@@ -5,6 +5,18 @@ export const getDashboardData = async () => {
     const response = await api.get('/api/tech-pulse/latest');
     const pulseData = response.data.pulse_data;
 
+    const rawCreatedAt = response.data.created_at;
+
+    // The backend sends a timestamp like "2025-08-04 07:29:31.201333+00".
+    // We must convert it to a valid ISO 8601 format that JS `new Date()` can parse.
+    // 1. Replace the space with a 'T'.
+    // 2. Remove the microseconds, as they can cause parsing issues.
+    const formattedTimestamp = rawCreatedAt
+      ? rawCreatedAt.replace(' ', 'T').replace(/\.\d{6}/, '')
+      : null;
+
+    const isValidDate = formattedTimestamp && !isNaN(new Date(formattedTimestamp).getTime());
+
     // This is the adapter logic. It transforms the single backend response
     // into the five separate data structures the frontend components expect.
     const transformedData = {
@@ -17,20 +29,18 @@ export const getDashboardData = async () => {
         })),
       },
       productHunt: {
-        product_details: pulseData.product_hunt_tag_connections.product_details.map((product: any) => ({
-          title: product.title,
-          url: product.url,
-          topic: product.topic,
-        })),
+        product_hunt_tag_connections: pulseData.product_hunt_tag_connections,
       },
       news: {
         hot_topics: pulseData.news_word_cloud.hot_topics.map((topic: any) => ({
           title: topic.topic,
           url: '#',
           source: 'Signal News',
-          publishedAt: new Date().toISOString(),
+          // Use the single, validated, and formatted timestamp for all items
+          publishedAt: isValidDate ? formattedTimestamp : new Date().toISOString(),
           summary: topic.summary,
         })),
+        created_at: isValidDate ? formattedTimestamp : new Date().toISOString(),
       },
       keywords: {
         keywords: pulseData.news_word_cloud.keywords.map((keyword: any) => ({

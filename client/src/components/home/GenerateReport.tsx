@@ -1,7 +1,7 @@
 
 import { ReportPreferences } from "../../pages/HomePage";
 import { TopicInput } from "./TopicInput";
-import { ReportHistory } from "./ReportHistory";
+
 import { Card } from "../ui/card";
 import { Progress } from "../ui/progress";
 import { Button } from "../ui/button";
@@ -73,7 +73,7 @@ export function GenerateReport({
       ]
 
     return (
-        <div className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
+        <div className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700 max-w-4xl mx-auto">
             <div className="text-center mb-8">
                 <h2 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-3">
                     Generate News Report
@@ -93,7 +93,6 @@ export function GenerateReport({
                         preferences={preferences}
                         onPreferencesChange={setPreferences}
                     />
-                    <ReportHistory id="report-history-section" />
                 </>
             ) : (
                 <Card className="p-6 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-0 shadow-lg mx-auto">

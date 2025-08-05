@@ -9,9 +9,11 @@ import { MarketPredictions } from '@/components/dashboard/MarketPredictions'
 import { getDashboardData } from '@/api/dashboard'
 import { useToast } from '@/hooks/useToast'
 
+import { Clock } from 'lucide-react';
+
 export function Dashboard() {
   const [loading, setLoading] = useState(true)
-  const [data, setData] = useState({
+  const [data, setData] = useState<any>({
     github: null,
     productHunt: null,
     news: null,
@@ -45,9 +47,24 @@ export function Dashboard() {
     fetchDashboardData()
   }, [toast])
 
+  const getFormattedTimestamp = () => {
+    if (!data?.news?.created_at) return null;
+
+    const date = new Date(data.news.created_at);
+    return date.toLocaleString(undefined, {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      timeZoneName: 'short',
+    });
+  };
+
   if (loading) {
     return (
-      <div className="min-h-[50vh] bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100 p-4">
+      <div className="bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100 p-4">
         <div className="w-full">
           <div className="mb-8">
             <Skeleton className="h-12 w-96 mb-4" />
@@ -76,7 +93,7 @@ export function Dashboard() {
   }
 
   return (
-    <div className="min-h-[50vh] bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100 p-6">
+    <div className="bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100 p-6">
       <div className="w-full">
         {/* Header */}
         <div className="mb-8">
@@ -86,6 +103,12 @@ export function Dashboard() {
           <p className="text-lg text-gray-600 max-w-3xl">
             Your comprehensive overview of today's technology landscape - from developer activity to market predictions
           </p>
+          {data?.news?.created_at && (
+            <div className="mt-4 flex items-center text-sm text-gray-500 bg-gray-100 p-2 rounded-md">
+              <Clock className="h-4 w-4 mr-2" />
+              <span>Last updated: {getFormattedTimestamp()}</span>
+            </div>
+          )}
         </div>
 
         {/* Dashboard Grid */}
