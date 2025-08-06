@@ -11,6 +11,8 @@ import { useToast } from '@/hooks/useToast'
 
 import { Clock } from 'lucide-react';
 
+import { TooltipProvider } from '@/components/ui/tooltip';
+
 export function Dashboard() {
   const [loading, setLoading] = useState(true)
   const [data, setData] = useState<any>({
@@ -112,32 +114,34 @@ export function Dashboard() {
         </div>
 
         {/* Dashboard Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[400px]">
-          {/* GitHub Trending - Top Left */}
-          <div className="lg:row-span-1">
-            <GitHubTrending data={data.github} />
-          </div>
+        <TooltipProvider delayDuration={100}>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[400px]">
+            {/* GitHub Trending - Top Left */}
+            <div className="lg:row-span-1">
+              <GitHubTrending data={data.github} />
+            </div>
 
-          {/* Product Hunt Insights - Top Center */}
-          <div className="lg:row-span-1">
-            <ProductHuntInsights data={data.productHunt} />
-          </div>
+            {/* Product Hunt Insights - Top Center */}
+            <div className="lg:row-span-1">
+              <ProductHuntInsights data={data.productHunt} />
+            </div>
 
-          {/* Daily News Brief - Right Side (spans full height) */}
-          <div className="lg:row-span-2">
-            <DailyNewsBrief data={data.news} />
-          </div>
+            {/* Daily News Brief - Right Side (spans full height) */}
+            <div className="lg:row-span-2">
+              <DailyNewsBrief data={data.news} />
+            </div>
 
-          {/* Tech Zeitgeist - Bottom Left */}
-          <div className="lg:row-span-1">
-            <TechZeitgeist data={data.keywords} />
-          </div>
+            {/* Tech Zeitgeist - Bottom Left */}
+            <div className="lg:row-span-1">
+              <TechZeitgeist data={data.keywords} />
+            </div>
 
-          {/* Market Predictions - Bottom Center */}
-          <div className="lg:row-span-1">
-            <MarketPredictions data={data.predictions} />
+            {/* Market Predictions - Bottom Center */}
+            <div className="lg:row-span-1">
+              <MarketPredictions data={data.predictions} />
+            </div>
           </div>
-        </div>
+        </TooltipProvider>
       </div>
     </div>
   )

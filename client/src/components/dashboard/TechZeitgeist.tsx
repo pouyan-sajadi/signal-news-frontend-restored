@@ -63,9 +63,8 @@ export function TechZeitgeist({ data }: TechZeitgeistProps) {
         <p className="text-sm text-gray-600">Trending concepts and buzzwords</p>
       </CardHeader>
       <CardContent className="pt-1">
-        <div className="h-64 overflow-hidden">
-          <TooltipProvider>
-            <div className="flex flex-wrap gap-2 h-full overflow-y-auto pr-1">
+        <div className="h-64">
+          <div className="flex flex-wrap gap-2 h-full overflow-y-auto pr-1">
               {displayKeywords.map((keyword, index) => (
                 <Tooltip key={index}>
                   <TooltipTrigger asChild>
@@ -91,7 +90,6 @@ export function TechZeitgeist({ data }: TechZeitgeistProps) {
                 </Tooltip>
               ))}
             </div>
-          </TooltipProvider>
         </div>
         <div className="mt-4 flex items-center gap-2 text-sm text-gray-600">
           <Brain className="h-4 w-4 text-purple-500" />

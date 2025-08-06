@@ -57,7 +57,7 @@ export function DailyNewsBrief({ data }: DailyNewsBriefProps) {
           </div>
           Intelligent News Brief
         </CardTitle>
-        <p className="text-sm text-gray-600">Latest technology headlines - Generated on {formatTimestamp(data.created_at)}</p>
+        <p className="text-sm text-gray-600">Latest technology headlines - Generated {formatTimestamp(data.created_at)}</p>
       </CardHeader>
       <CardContent className="pt-1 h-[calc(100%-120px)]">
         <ScrollArea className="h-full pr-2">
