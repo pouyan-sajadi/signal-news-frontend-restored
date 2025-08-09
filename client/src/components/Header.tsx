@@ -2,6 +2,7 @@ import { Newspaper, History, Settings } from "lucide-react"
 import { Button } from "./ui/button"
 import { ThemeToggle } from "./ui/theme-toggle"
 import { useNavigate } from "react-router-dom"
+import { UserProfile } from "./UserProfile"
 
 export function Header() {
   const navigate = useNavigate()
@@ -33,6 +34,7 @@ export function Header() {
             Settings
           </Button>
           <ThemeToggle />
+          <UserProfile />
         </div>
       </div>
     </header>

@@ -1,21 +1,16 @@
 import { useEffect, useState } from "react";
-import { getReportHistory, ReportPreferences } from "../../api/reports";
+import { getReportHistory } from "../../api/reports";
+import { Report } from "../../pages/ReportPage";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { format, formatDistanceToNow, isToday } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
 import { History, FileText, ChevronDown, ChevronUp } from "lucide-react";
 
-interface HistoricalReport {
-  job_id: string;
-  topic: string;
-  refined_topic?: string;
-  timestamp: string;
-  user_preferences: ReportPreferences;
-}
+
 
 export function ReportHistory() {
-  const [history, setHistory] = useState<HistoricalReport[]>([]);
+  const [history, setHistory] = useState<Report[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);

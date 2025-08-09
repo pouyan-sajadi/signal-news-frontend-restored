@@ -1,5 +1,7 @@
 import api from './api';
 import { ReportPreferences } from '../pages/HomePage';
+import { saveHistory } from './history';
+import { supabase } from '../lib/supabaseClient';
 
 const BACKEND_URL = 'http://localhost:8000'; // Assuming FastAPI runs on this port
 
@@ -59,7 +61,10 @@ export const generateReport = async (data: {
 
         if (message.status === 'completed' && message.step === 'editing') {
           // Final report received
-          resolve({job_id, finalReport: message.data as FinalReportData});
+          const finalReportData = message.data as FinalReportData;
+          // Call the updated saveHistory function
+          saveHistory(data.topic, data.preferences, finalReportData.agent_details.editing, job_id);
+          resolve({job_id, finalReport: finalReportData });
           ws.close();
         } else if (message.status === 'error') {
           reject(new Error(message.message || 'An unknown error occurred during processing.'));
@@ -86,6 +91,8 @@ export const generateReport = async (data: {
   }
 };
 
+import { Report } from '../pages/ReportPage';
+
 // The getReport, getReportHistory, deleteReport, getTrendingTopics, getDailyNews functions
 // will remain mocked for now, or need to be updated to fetch from the backend if corresponding
 // endpoints exist or are added.
@@ -93,10 +100,10 @@ export const generateReport = async (data: {
 // obsolete or need to fetch from a persistent storage if implemented in the backend.
 // For now, I will comment out the mock and leave the actual API call commented out as well,
 // as it's not clear if the backend has a /reports/:id endpoint.
-export const getReport = async (jobId: string): Promise<FinalReportData> => {
+export const getReport = async (jobId: string): Promise<Report> => {
   try {
     const response = await api.get(`${BACKEND_URL}/reports/${jobId}`);
-    return response.data as FinalReportData;
+    return response.data as Report;
   } catch (error: any) {
     console.error(`Error fetching report ${jobId}:`, error);
     throw new Error(error?.response?.data?.detail || error.message || `Failed to fetch report ${jobId}.`);
@@ -107,10 +114,20 @@ export const getReport = async (jobId: string): Promise<FinalReportData> => {
 // Endpoint: GET /api/reports/history
 // Request: {}
 // Response: { reports: Array<{ id: string, topic: string, createdAt: string, preferences: ReportPreferences }> }
-export const getReportHistory = async (): Promise<Array<{ job_id: string, topic: string, timestamp: string, user_preferences: ReportPreferences }>> => {
+export const getReportHistory = async (): Promise<Report[]> => {
   try {
-    const response = await api.get(`${BACKEND_URL}/reports/history`);
-    return response.data;
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      return [];
+    }
+
+    const response = await api.get(`${BACKEND_URL}/api/history`, {
+      headers: {
+        'Authorization': `Bearer ${session.access_token}`,
+      },
+    });
+    // The backend now returns the correct array of report objects, so we just need to type it correctly.
+    return response.data as Report[];
   } catch (error: any) {
     console.error("Error fetching report history:", error);
     throw new Error(error?.response?.data?.detail || error.message || "Failed to fetch report history.");
