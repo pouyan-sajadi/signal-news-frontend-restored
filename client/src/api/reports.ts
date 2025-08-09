@@ -142,23 +142,23 @@ export const getReportHistory = async (): Promise<Report[]> => {
 // Endpoint: DELETE /api/reports/:id
 // Request: {}
 // Response: { success: boolean, message: string }
-export const deleteReport = async (id: string) => {
-  // Mocking the response
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({
-        success: true,
-        message: "Report deleted successfully"
-      });
-    }, 500);
-  });
-  // Uncomment the below lines to make an actual API call
-  // try {
-  //   const response = await api.delete(`/api/reports/${id}`);
-  //   return response.data;
-  // } catch (error: any) {
-  //   throw new Error(error?.response?.data?.message || error.message);
-  // }
+export const deleteReport = async (jobId: string) => {
+  try {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      throw new Error("User not authenticated.");
+    }
+
+    const response = await api.delete(`${BACKEND_URL}/api/history/${jobId}`, {
+      headers: {
+        'Authorization': `Bearer ${session.access_token}`,
+      },
+    });
+    return response.data;
+  } catch (error: any) {
+    console.error(`Error deleting report ${jobId}:`, error);
+    throw new Error(error?.response?.data?.detail || error.message || `Failed to delete report ${jobId}.`);
+  }
 };
 
 // Description: Get trending topics

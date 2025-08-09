@@ -5,9 +5,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { format, formatDistanceToNow, isToday } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
-import { History, FileText, ChevronDown, ChevronUp } from "lucide-react";
-
-
+import { History, FileText, ChevronDown, ChevronUp, Trash2 } from "lucide-react";
+import { supabase } from "../../lib/supabaseClient";
+import { deleteReport } from "../../api/reports"; // Will create this function next
+import { useToast } from "../../hooks/useToast";
 
 export function ReportHistory() {
   const [history, setHistory] = useState<Report[]>([]);
@@ -15,6 +16,7 @@ export function ReportHistory() {
   const [error, setError] = useState<string | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   useEffect(() => {
     const fetchHistory = async () => {
@@ -45,9 +47,49 @@ export function ReportHistory() {
     return formatDistanceToNow(date, { addSuffix: true });
   };
 
-  const handleViewReport = (report: HistoricalReport) => {
+  const handleViewReport = (report: Report) => {
     // Navigate to the report page, passing the job_id
     navigate(`/report/${report.job_id}`);
+  };
+
+  const handleDeleteReport = async (jobId: string) => {
+    if (!window.confirm("Are you sure you want to delete this report?")) {
+      return;
+    }
+
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+
+      if (session?.user) {
+        // Signed-in user: Delete from database via API
+        await deleteReport(jobId);
+        toast({
+          title: "Report Deleted",
+          description: "Report successfully removed from your history.",
+        });
+      } else {
+        // Guest user: Delete from sessionStorage
+        const guestHistoryString = sessionStorage.getItem('guestReportHistory');
+        let guestHistory = guestHistoryString ? JSON.parse(guestHistoryString) : [];
+        guestHistory = guestHistory.filter(report => report.job_id !== jobId);
+        sessionStorage.setItem('guestReportHistory', JSON.stringify(guestHistory));
+        toast({
+          title: "Report Deleted",
+          description: "Report successfully removed from session history.",
+        });
+      }
+
+      // Update local state to reflect deletion
+      setHistory(prevHistory => prevHistory.filter(report => report.job_id !== jobId));
+
+    } catch (error) {
+      console.error("Error deleting report:", error);
+      toast({
+        title: "Deletion Failed",
+        description: "Could not delete the report. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   if (loading) {
@@ -109,6 +151,9 @@ export function ReportHistory() {
                   </div>
                   <Button variant="outline" size="sm" onClick={() => handleViewReport(report)}>
                     <FileText className="w-4 h-4 mr-2" /> View Report
+                  </Button>
+                  <Button variant="ghost" size="sm" onClick={() => handleDeleteReport(report.job_id)}>
+                    <Trash2 className="w-4 h-4 text-red-500" />
                   </Button>
                 </div>
               ))}
