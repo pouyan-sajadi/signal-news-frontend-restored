@@ -35,6 +35,7 @@ export interface Report {
 export function ReportPage() {
   const { id } = useParams<{ id: string }>(); // `id` is now the job_id
   const navigate = useNavigate();
+  const location = useLocation(); // Use useLocation hook
   const { toast } = useToast();
   const [report, setReport] = useState<Report | null>(null);
   const [loading, setLoading] = useState(true);
@@ -52,8 +53,17 @@ export function ReportPage() {
         return;
       }
 
+      // Check if report data is already available in location state
+      if (location.state?.report) {
+        setReport(location.state.report);
+        setLoading(false);
+        return;
+      }
+
+      // If not in state, fetch from API
       try {
         setLoading(true);
+        console.log("Fetching report from API for ID:", id);
         const fetchedReport = await getReport(id);
         setReport(fetchedReport);
       } catch (error) {
@@ -70,7 +80,7 @@ export function ReportPage() {
     };
 
     fetchReport();
-  }, [id, navigate, toast]);
+  }, [id, navigate, toast, location.state]);
 
   const handleShare = () => {
     navigator.clipboard.writeText(window.location.href)

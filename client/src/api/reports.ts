@@ -116,19 +116,21 @@ export const getReportHistory = async (): Promise<Report[]> => {
   try {
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) {
-      return [];
+      // Guest user: fetch from sessionStorage
+      const guestHistory = sessionStorage.getItem('guestReportHistory');
+      return guestHistory ? JSON.parse(guestHistory) : [];
     }
 
+    // Logged-in user: fetch from backend
     const response = await api.get(`${BACKEND_URL}/api/history`, {
       headers: {
         'Authorization': `Bearer ${session.access_token}`,
       },
     });
-    // Log the timestamp of the first item received from the backend
+    // The backend now returns the correct array of report objects, so we just need to type it correctly.
     if (response.data && response.data.length > 0) {
       console.log(`API fetch (getReportHistory): First item timestamp is ${response.data[0].timestamp}`);
     }
-    // The backend now returns the correct array of report objects, so we just need to type it correctly.
     return response.data as Report[];
   } catch (error: any) {
     console.error("Error fetching report history:", error);

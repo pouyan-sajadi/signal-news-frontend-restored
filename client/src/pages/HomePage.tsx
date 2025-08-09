@@ -8,8 +8,9 @@ import { generateReport, FinalReportData } from "../api/reports"
 import { useToast } from "../hooks/useToast"
 import { Card } from "../components/ui/card"
 import { Progress } from "../components/ui/progress"
-import { Button } from "../components/ui/button"
+import { Button, ButtonProps } from "../components/ui/button"
 import { X, Search, BarChart3, Target, Brain, Edit3 } from "lucide-react"
+import { Report } from "../components/home/ReportHistory";
 
 export interface ReportPreferences {
   focus: string
@@ -114,8 +115,25 @@ export function HomePage() {
       })
 
       console.log("Report generated successfully:", finalReport)
-      // Navigate to the report page, passing the full report data in state
-      navigate(`/report/${job_id}`, { state: { report: finalReport } })
+
+      // Construct the Report object to pass to the ReportPage
+      const reportToPass: Report = {
+        job_id: job_id,
+        user_preferences: preferences,
+        final_report_data: {
+          editing: finalReport.agent_details.editing,
+          search: finalReport.agent_details.search,
+          profiling: finalReport.agent_details.profiling,
+          selection: finalReport.agent_details.selection,
+          synthesis: finalReport.agent_details.synthesis,
+        },
+        topic: topic.trim(),
+        refined_topic: refinedTopic || topic.trim(), // Use refined topic if available
+        timestamp: new Date().toISOString(),
+      };
+
+      // Navigate to the report page, passing the correctly structured report object
+      navigate(`/report/${job_id}`, { state: { report: reportToPass } })
     } catch (error) {
       console.error("Error generating report:", error)
       toast({
