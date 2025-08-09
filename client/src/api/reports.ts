@@ -39,7 +39,6 @@ export const generateReport = async (data: {
       const ws = new WebSocket(`${BACKEND_URL.replace('http', 'ws')}/ws/status/${job_id}`);
 
       ws.onopen = () => {
-        console.log('WebSocket connected for job:', job_id);
         if (data.onProgress) {
           data.onProgress("WebSocket connected. Waiting for updates...");
         }
@@ -47,7 +46,6 @@ export const generateReport = async (data: {
 
       ws.onmessage = (event) => {
         const message = JSON.parse(event.data);
-        console.log('WebSocket message:', message);
 
         if (data.onProgress) {
           data.onProgress(message.message || `Step: ${message.step}, Status: ${message.status}`, message);
@@ -126,6 +124,10 @@ export const getReportHistory = async (): Promise<Report[]> => {
         'Authorization': `Bearer ${session.access_token}`,
       },
     });
+    // Log the timestamp of the first item received from the backend
+    if (response.data && response.data.length > 0) {
+      console.log(`API fetch (getReportHistory): First item timestamp is ${response.data[0].timestamp}`);
+    }
     // The backend now returns the correct array of report objects, so we just need to type it correctly.
     return response.data as Report[];
   } catch (error: any) {

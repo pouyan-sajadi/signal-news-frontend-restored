@@ -23,6 +23,10 @@ export function ReportHistory() {
         const data = await getReportHistory();
         // Sort by timestamp in descending order (newest first)
         const sortedData = data.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+        // Log the timestamp of the first item after it has been sorted
+        if (sortedData && sortedData.length > 0) {
+          console.log(`Component pre-render (ReportHistory): First item timestamp is ${sortedData[0].timestamp}`);
+        }
         setHistory(sortedData);
       } catch (err) {
         setError("Failed to load report history.");
@@ -35,31 +39,10 @@ export function ReportHistory() {
   }, []);
 
   const formatTimestamp = (timestamp: string) => {
-    const date = new Date(timestamp); // This is now correctly parsed as UTC
-    const now = new Date(); // Get current local time
-    const nowUtc = new Date(now.toUTCString()); // Convert current local time to UTC Date object
-
-    const diffMs = nowUtc.getTime() - date.getTime(); // Calculate difference using UTC times
-    const diffMinutes = Math.round(Math.abs(diffMs) / (1000 * 60));
-    const diffHours = Math.floor(Math.abs(diffMs) / (1000 * 60 * 60));
-
-    // To check if 'date' is "today" in UTC:
-    const isSameUtcCalendarDay = date.getUTCFullYear() === nowUtc.getUTCFullYear() &&
-                                 date.getUTCMonth() === nowUtc.getUTCMonth() &&
-                                 date.getUTCDate() === nowUtc.getUTCDate();
-
-    // Case 1: Less than 60 minutes ago
-    if (diffMinutes < 60) {
-      return `${diffMinutes} ${diffMinutes === 1 ? 'minute' : 'minutes'} ago`;
-    } 
-    // Case 2: Over 60 minutes but within the same calendar day (UTC)
-    else if (isSameUtcCalendarDay) {
-      return `${diffHours} ${diffHours === 1 ? 'hour' : 'hours'} ago`;
-    } 
-    // Case 3: Not within the same calendar day (UTC)
-    else {
-      return format(date, "MMM dd, yyyy"); // This will still format in local time for display
-    }
+    const date = new Date(timestamp);
+    // Use formatDistanceToNow for relative time and format for older dates
+    // addSuffix: true adds "ago"
+    return formatDistanceToNow(date, { addSuffix: true });
   };
 
   const handleViewReport = (report: HistoricalReport) => {

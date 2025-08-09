@@ -26,7 +26,6 @@ export function Dashboard() {
 
   useEffect(() => {
     const fetchDashboardData = async () => {
-      console.log('Fetching dashboard data...')
       setLoading(true)
 
       try {
