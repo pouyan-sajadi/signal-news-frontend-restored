@@ -4,6 +4,7 @@ import { ReportHistory } from './home/ReportHistory';
 import { Button } from './ui/button';
 import { PanelLeftOpen, PanelLeftClose, History } from 'lucide-react';
 import { Header } from './Header';
+import { Footer } from './Footer';
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 
 interface LayoutWithSidebarProps {
@@ -13,7 +14,7 @@ interface LayoutWithSidebarProps {
 }
 
 export function LayoutWithSidebar({ children, reportCount, setReportCount }: LayoutWithSidebarProps) {
-  const [isDesktopSidebarOpen, setIsDesktopSidebarOpen] = useState(true);
+  const [isDesktopSidebarOpen, setIsDesktopSidebarOpen] = useState(false);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
   return (
@@ -70,13 +71,12 @@ export function LayoutWithSidebar({ children, reportCount, setReportCount }: Lay
       </Sheet>
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col overflow-y-auto">
-        <Header 
-          isDesktopSidebarOpen={isDesktopSidebarOpen} 
-          setIsDesktopSidebarOpen={setIsDesktopSidebarOpen}
-          setIsMobileSidebarOpen={setIsMobileSidebarOpen}
-        />
-        {children || <Outlet context={{ setReportCount }} />}
+      <main className="flex-1 flex flex-col">
+        <Header />
+        <div className="flex-grow overflow-y-auto">
+          {children || <Outlet context={{ setReportCount }} />}
+        </div>
+        <Footer />
       </main>
     </div>
   );

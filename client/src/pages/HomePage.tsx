@@ -2,6 +2,7 @@ import { useState } from "react"
 import { useNavigate, useOutletContext } from "react-router-dom"
 import { Dashboard } from "./Dashboard"
 import { TopSearchSection } from "../components/home/TopSearchSection";
+import { HeroSection } from "../components/home/HeroSection";
 
 import { generateReport, FinalReportData } from "../api/reports"
 import { useToast } from "../hooks/useToast"
@@ -163,7 +164,11 @@ export function HomePage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 flex flex-col flex-grow">
+      <HeroSection />
+      <div className="mt-8 flex-grow">
+        <Dashboard />
+      </div>
       <TopSearchSection
         topic={topic}
         setTopic={setTopic}
@@ -177,9 +182,6 @@ export function HomePage() {
         refinedTopic={refinedTopic}
         handleCancelGeneration={handleCancelGeneration}
       />
-      <div className="mt-8 flex-grow">
-        <Dashboard />
-      </div>
     </div>
   )
 }

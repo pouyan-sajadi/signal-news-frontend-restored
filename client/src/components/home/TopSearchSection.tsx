@@ -71,15 +71,15 @@ export function TopSearchSection({
   ]
 
   return (
-    <div id="top-search-section" className="py-12 text-center">
-      <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-4">
-        Signal News: AI-Powered Insights
+    <div id="top-search-section" className="bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100 p-4 mb-32 py-8 text-center">
+      <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-4">
+        Intelligent Search, Unbiased Reports
       </h1>
       <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
         Transform any topic into a comprehensive, AI-generated news report in real-time.
         Get noise-free content, instant intelligence, and personalized reports.
       </p>
-      <div className="max-w-2xl mx-auto">
+      <div className="max-w-4xl mx-auto">
         {!isGenerating ? (
           <TopicInput
             value={topic}

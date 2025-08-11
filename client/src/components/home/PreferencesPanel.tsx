@@ -55,7 +55,7 @@ export function PreferencesPanel({ preferences, onChange }: PreferencesPanelProp
             <div className="flex items-center gap-2">
               <Settings2 className="h-4 w-4" />
               <span className="font-medium">Customize Report</span>
-              <div className="flex gap-1">
+              <div className="flex flex-wrap gap-1">
                 <Badge variant="outline" className="text-xs">
                   {preferences.focus}
                 </Badge>

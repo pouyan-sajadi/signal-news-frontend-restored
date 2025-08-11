@@ -96,13 +96,13 @@ export function Dashboard() {
   }
 
   return (
-    <div id="dashboard-section" className="bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100 p-4 mb-8">
+    <div id="dashboard-section" className="bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100 p-4 mb-32">
       <div className="w-full">
         {/* Header */}
-        <div className="mb-4">
-          <div className="flex items-center gap-2 mb-3">
+        <div className="mb-4 text-center">
+          <div className="flex items-center justify-center gap-2 mb-3">
             <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-              Daily Tech Pulse Dashboard
+               Daily Tech Overview
             </h1>
             <Dialog>
               <DialogTrigger asChild>
@@ -123,7 +123,7 @@ export function Dashboard() {
           </div>
 
           {data?.news?.created_at && (
-            <div className="mt-3 flex items-center text-xs text-gray-500 bg-gray-100 p-1 rounded-md">
+            <div className="mt-3 flex items-center justify-center text-xs text-gray-500 bg-gray-100 p-1 rounded-md">
               <Clock className="h-3 w-3 mr-1" />
               <span>Last updated: {getFormattedTimestamp()}</span>
             </div>
@@ -132,7 +132,7 @@ export function Dashboard() {
 
         {/* Dashboard Grid */}
         <TooltipProvider delayDuration={100}>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 h-[350px]">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             {/* GitHub Trending - Top Left */}
             <div className="lg:row-span-1">
               <GitHubTrending data={data.github} />
