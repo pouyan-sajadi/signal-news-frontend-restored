@@ -5,21 +5,46 @@ import { ProductHuntSankeyChart } from '@/components/charts/ProductHuntSankeyCha
 interface ProductHuntInsightsProps {
   data: {
     product_hunt_tag_connections: {
-      nodes: Array<{ id: string }>;
-      links: Array<{ source: string; target: string; value: number }>;
+      product_hunt_tag_connections: {
+        nodes: Array<{ id: string }>;
+        links: Array<{ source: string; target: string; value: number }>;
+      } | null;
     } | null;
   } | null;
 }
 
 export function ProductHuntInsights({ data }: ProductHuntInsightsProps) {
+  console.log("ProductHuntInsights data:", JSON.stringify(data, null, 2));
   if (!data || !data.product_hunt_tag_connections) {
-    console.log("ProductHuntInsights: No data or product_hunt_tag_connections found", data);
-    return null;
+    return (
+      <Card className="h-full bg-white/70 backdrop-blur-sm border-0 shadow-xl flex items-center justify-center">
+        <p className="text-muted-foreground">No Product Hunt data available.</p>
+      </Card>
+    );
   }
+
   const sankeyData = data.product_hunt_tag_connections;
-  console.log("ProductHuntInsights: Data received for Sankey chart", sankeyData);
-  console.log("ProductHuntInsights: Sankey nodes", sankeyData.nodes);
-  console.log("ProductHuntInsights: Sankey links", sankeyData.links);
+
+  if (!sankeyData.links || sankeyData.links.length === 0) {
+    return (
+      <Card className="h-full bg-white/70 backdrop-blur-sm border-0 shadow-xl flex items-center justify-center">
+        <p className="text-muted-foreground">No Product Hunt connections to display.</p>
+      </Card>
+    );
+  }
+
+  const nodesInLinks = new Set();
+  sankeyData.links.forEach(link => {
+    nodesInLinks.add(link.source);
+    nodesInLinks.add(link.target);
+  });
+
+  const filteredNodes = sankeyData.nodes.filter(node => nodesInLinks.has(node.id));
+
+  const filteredSankeyData = {
+    nodes: filteredNodes,
+    links: sankeyData.links
+  };
 
   return (
     <Card className="h-full bg-white/70 backdrop-blur-sm border-0 shadow-xl hover:shadow-2xl transition-all duration-300">
@@ -30,10 +55,10 @@ export function ProductHuntInsights({ data }: ProductHuntInsightsProps) {
           </div>
           Product Hunt Category Flow
         </CardTitle>
-        <p className="text-sm text-gray-600">Connections between top product categories</p>
+        <p className="text-sm text-gray-600">Which products are catching customers’ attention?</p>
       </CardHeader>
       <CardContent className="pt-1 h-[calc(100%-80px)]">
-        <ProductHuntSankeyChart data={sankeyData.product_hunt_tag_connections} />
+        <ProductHuntSankeyChart data={filteredSankeyData} />
       </CardContent>
     </Card>
   );

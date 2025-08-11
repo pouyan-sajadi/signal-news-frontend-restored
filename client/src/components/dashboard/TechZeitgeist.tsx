@@ -60,7 +60,7 @@ export function TechZeitgeist({ data }: TechZeitgeistProps) {
           </div>
           Tech Zeitgeist
         </CardTitle>
-        <p className="text-sm text-gray-600">Trending concepts and buzzwords</p>
+        <p className="text-sm text-gray-600">What’s at the center of today’s buzz?</p>
       </CardHeader>
       <CardContent className="pt-1">
         <div className="h-52">

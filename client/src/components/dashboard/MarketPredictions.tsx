@@ -143,7 +143,7 @@ export function MarketPredictions({ data }: MarketPredictionsProps) {
           </div>
           Market Predictions
         </CardTitle>
-        <p className="text-sm text-gray-600">Market consensus vs financial commitment</p>
+        <p className="text-sm text-gray-600">What’s the smart money on?</p>
       </CardHeader>
       <CardContent className="pt-1">
         <div className="h-40">

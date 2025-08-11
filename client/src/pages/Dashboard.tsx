@@ -8,8 +8,10 @@ import { TechZeitgeist } from '@/components/dashboard/TechZeitgeist'
 import { MarketPredictions } from '@/components/dashboard/MarketPredictions'
 import { getDashboardData } from '@/api/dashboard'
 import { useToast } from '@/hooks/useToast'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
-import { Clock } from 'lucide-react';
+import { Clock, Info } from 'lucide-react';
 
 import { TooltipProvider } from '@/components/ui/tooltip';
 
@@ -98,12 +100,28 @@ export function Dashboard() {
       <div className="w-full">
         {/* Header */}
         <div className="mb-4">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent mb-3">
-            Daily Tech Pulse Dashboard
-          </h1>
-          <p className="text-base text-gray-600 max-w-3xl">
-            Your comprehensive overview of today's technology landscape - from developer activity to market predictions
-          </p>
+          <div className="flex items-center gap-2 mb-3">
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+              Daily Tech Pulse Dashboard
+            </h1>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="ghost" size="sm" className="text-muted-foreground">
+                  <Info className="h-4 w-4 mr-1" />
+                  What's this?
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>About the Dashboard</DialogTitle>
+                </DialogHeader>
+                <p>
+                  This dashboard provides a real-time overview of the tech landscape. It combines data from various sources to help you spot emerging trends, understand market sentiment, and stay informed about the latest developments. To get more details on each, simply click on them.
+                </p>
+              </DialogContent>
+            </Dialog>
+          </div>
+
           {data?.news?.created_at && (
             <div className="mt-3 flex items-center text-xs text-gray-500 bg-gray-100 p-1 rounded-md">
               <Clock className="h-3 w-3 mr-1" />

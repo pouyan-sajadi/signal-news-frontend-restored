@@ -90,7 +90,7 @@ export function GitHubTrending({ data }: GitHubTrendingProps) {
             </div>
             Developer Activity
           </CardTitle>
-          <p className="text-sm text-gray-600">Trending programming languages</p>
+          <p className="text-sm text-gray-600">Which programming languages are gaining momentum in the open-source?</p>
         </CardHeader>
         <CardContent className="pt-1">
           <div className="h-52">
