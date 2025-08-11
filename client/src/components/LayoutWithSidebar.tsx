@@ -4,6 +4,7 @@ import { ReportHistory } from './home/ReportHistory';
 import { Button } from './ui/button';
 import { PanelLeftOpen, PanelLeftClose, History } from 'lucide-react';
 import { Header } from './Header';
+import { Sheet, SheetContent } from "@/components/ui/sheet";
 
 interface LayoutWithSidebarProps {
   children?: React.ReactNode;
@@ -12,18 +13,19 @@ interface LayoutWithSidebarProps {
 }
 
 export function LayoutWithSidebar({ children, reportCount, setReportCount }: LayoutWithSidebarProps) {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isDesktopSidebarOpen, setIsDesktopSidebarOpen] = useState(true);
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
   return (
     <div className="flex min-h-screen bg-background">
-      {/* Sidebar */}
+      {/* Desktop Sidebar */}
       <aside
-        className={`relative flex flex-col h-screen bg-card border-r border-border transition-all duration-300 ease-in-out
-          ${isSidebarOpen ? 'w-64 p-4' : 'w-16 items-center p-2'}
-          hidden md:flex`}
+        className={`relative flex-col h-screen bg-card border-r border-border transition-all duration-300 ease-in-out
+          ${isDesktopSidebarOpen ? 'w-64 p-4' : 'w-16 items-center p-2'}
+          hidden md:flex`} // Hidden on small, flex on medium and up
       >
         <div className="flex items-center justify-between mb-4">
-          {isSidebarOpen && (
+          {isDesktopSidebarOpen && (
             <h2 className="text-lg font-semibold flex items-center gap-2">
               <History className="h-5 w-5" />
               Report History
@@ -32,21 +34,48 @@ export function LayoutWithSidebar({ children, reportCount, setReportCount }: Lay
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            onClick={() => setIsDesktopSidebarOpen(!isDesktopSidebarOpen)}
             className="ml-auto"
           >
-            {isSidebarOpen ? <PanelLeftClose className="h-5 w-5" /> : <PanelLeftOpen className="h-5 w-5" />}
+            {isDesktopSidebarOpen ? <PanelLeftClose className="h-5 w-5" /> : <PanelLeftOpen className="h-5 w-5" />}
           </Button>
         </div>
 
         <div className="flex-1 overflow-y-auto">
-          <ReportHistory isSidebar={true} isSidebarOpen={isSidebarOpen} reportCount={reportCount} />
+          <ReportHistory isSidebar={true} isSidebarOpen={isDesktopSidebarOpen} reportCount={reportCount} />
         </div>
       </aside>
 
+      {/* Mobile Sidebar (Sheet) */}
+      <Sheet open={isMobileSidebarOpen} onOpenChange={setIsMobileSidebarOpen}>
+        {/* SheetTrigger will be in the Header component for mobile */}
+        <SheetContent side="left" className="w-64 p-4">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-semibold flex items-center gap-2">
+              <History className="h-5 w-5" />
+              Report History
+            </h2>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setIsMobileSidebarOpen(false)}
+            >
+              <PanelLeftClose className="h-5 w-5" />
+            </Button>
+          </div>
+          <div className="flex-1 overflow-y-auto">
+            <ReportHistory isSidebar={true} isMobileSidebarOpen={true} reportCount={reportCount} />
+          </div>
+        </SheetContent>
+      </Sheet>
+
       {/* Main Content */}
       <main className="flex-1 flex flex-col overflow-y-auto">
-        <Header isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
+        <Header 
+          isDesktopSidebarOpen={isDesktopSidebarOpen} 
+          setIsDesktopSidebarOpen={setIsDesktopSidebarOpen}
+          setIsMobileSidebarOpen={setIsMobileSidebarOpen}
+        />
         {children || <Outlet context={{ setReportCount }} />}
       </main>
     </div>

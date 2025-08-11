@@ -2,6 +2,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { ScatterChart, Scatter, XAxis, YAxis, ResponsiveContainer, Tooltip, Cell, Legend, ReferenceLine } from 'recharts'
 import { TrendingUp, Target } from 'lucide-react'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { useState } from 'react'
 
 interface MarketPredictionsProps {
   data: {
@@ -16,6 +18,7 @@ interface MarketPredictionsProps {
 
 export function MarketPredictions({ data }: MarketPredictionsProps) {
   if (!data) return null
+  const [selectedPrediction, setSelectedPrediction] = useState<any>(null);
 
   const getCategoryColor = (category: string) => {
     const colors = {
@@ -135,59 +138,83 @@ export function MarketPredictions({ data }: MarketPredictionsProps) {
   const maxVolume = Math.max(...transformedData.map(d => d.y));
 
   return (
-    <Card className="h-full bg-white/70 backdrop-blur-sm border-0 shadow-xl hover:shadow-2xl transition-all duration-300">
-      <CardHeader className="pb-1">
-        <CardTitle className="flex items-center gap-2 text-lg font-bold text-gray-800">
-          <div className="p-2 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-lg">
-            <Target className="h-5 w-5 text-white" />
+    <>
+      <Card className="h-full bg-white/70 backdrop-blur-sm border-0 shadow-xl hover:shadow-2xl transition-all duration-300">
+        <CardHeader className="pb-1">
+          <CardTitle className="flex items-center gap-2 text-lg font-bold text-gray-800">
+            <div className="p-2 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-lg">
+              <Target className="h-5 w-5 text-white" />
+            </div>
+            Market Predictions
+          </CardTitle>
+          <p className="text-sm text-gray-600">What’s the smart money on?</p>
+        </CardHeader>
+        <CardContent className="pt-1">
+          <div className="h-40">
+            <ResponsiveContainer width="100%" height="100%">
+              <ScatterChart margin={{ top: 15, right: 5, bottom: 5, left: 40 }}>
+                <XAxis
+                  type="number"
+                  dataKey="x"
+                  domain={[-1, 1]}
+                  tickFormatter={formatXAxisTick}
+                  allowDuplicatedCategory={false}
+                  name="Market Consensus"
+                  tick={{ fontSize: 13 }}
+                />
+                <YAxis
+                  type="number"
+                  dataKey="y"
+                  scale="log"
+                  domain={[minVolume * 0.8, maxVolume * 1.2]}
+                  tickFormatter={formatYAxisTick}
+                  name="Total Money Invested (Log Scale)"
+                  tick={{ fontSize: 13 }}
+                  label={{ value: "Total Money Invested", angle: -90, position: 'insideLeft', dx: 0, dy: 60, fill: '#64748b', fontSize: 13 }}
+                />
+                <ReferenceLine x={0} stroke="#e2e8f0" strokeDasharray="3 3" label={{ value: 'High Controversy', position: 'top', fill: '#64748b', fontSize: 11 }} />
+                <Tooltip content={<CustomTooltip />} cursor={{ strokeDasharray: '3 3' }} />
+                <Scatter data={transformedData} onClick={(data) => {
+                  if (data && data.payload) {
+                    setSelectedPrediction(data.payload);
+                  }
+                }}>
+                  {transformedData.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={getCategoryColor(entry.category)}
+                      className="hover:opacity-80 transition-opacity cursor-pointer"
+                    />
+                  ))}
+                </Scatter>
+              </ScatterChart>
+            </ResponsiveContainer>
           </div>
-          Market Predictions
-        </CardTitle>
-        <p className="text-sm text-gray-600">What’s the smart money on?</p>
-      </CardHeader>
-      <CardContent className="pt-1">
-        <div className="h-40">
-          <ResponsiveContainer width="100%" height="100%">
-            <ScatterChart margin={{ top: 15, right: 5, bottom: 5, left: 40 }}>
-              <XAxis
-                type="number"
-                dataKey="x"
-                domain={[-1, 1]}
-                tickFormatter={formatXAxisTick}
-                allowDuplicatedCategory={false}
-                name="Market Consensus"
-                tick={{ fontSize: 13 }}
-              />
-              <YAxis
-                type="number"
-                dataKey="y"
-                scale="log"
-                domain={[minVolume * 0.8, maxVolume * 1.2]}
-                tickFormatter={formatYAxisTick}
-                name="Total Money Invested (Log Scale)"
-                tick={{ fontSize: 13 }}
-                label={{ value: "Total Money Invested", angle: -90, position: 'insideLeft', dx: 0, dy: 60, fill: '#64748b', fontSize: 13 }}
-              />
-              <ReferenceLine x={0} stroke="#e2e8f0" strokeDasharray="3 3" label={{ value: 'High Controversy', position: 'top', fill: '#64748b', fontSize: 11 }} />
-              <Tooltip content={<CustomTooltip />} cursor={{ strokeDasharray: '3 3' }} />
-              <Scatter data={transformedData}>
-                {transformedData.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={getCategoryColor(entry.category)}
-                    className="hover:opacity-80 transition-opacity cursor-pointer"
-                  />
-                ))}
-              </Scatter>
-            </ScatterChart>
-          </ResponsiveContainer>
-        </div>
-        <CustomLegend />
-        <div className="mt-1 flex items-center gap-2 text-sm text-gray-600">
-          <TrendingUp className="h-4 w-4 text-blue-500" />
-          <span>High interest in AI and hardware predictions</span>
-        </div>
-      </CardContent>
-    </Card>
+          <CustomLegend />
+          <div className="mt-1 flex items-center gap-2 text-sm text-gray-600">
+            <TrendingUp className="h-4 w-4 text-blue-500" />
+            <span>High interest in AI and hardware predictions</span>
+          </div>
+        </CardContent>
+      </Card>
+      <Dialog open={!!selectedPrediction} onOpenChange={() => setSelectedPrediction(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{selectedPrediction?.question}</DialogTitle>
+            <DialogDescription>
+              Category: {selectedPrediction?.category}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="mt-4">
+            <p className="text-sm text-gray-700 leading-relaxed">
+              Predicted Likelihood: {selectedPrediction?.originalProbability}%
+            </p>
+            <p className="text-sm text-gray-700 leading-relaxed">
+              Capital at Stake: ${Math.round(selectedPrediction?.volume || 0).toLocaleString()}
+            </p>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </>
   )
 }

@@ -96,7 +96,7 @@ export function Dashboard() {
   }
 
   return (
-    <div id="dashboard-section" className="bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100 p-4">
+    <div id="dashboard-section" className="bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100 p-4 mb-8">
       <div className="w-full">
         {/* Header */}
         <div className="mb-4">

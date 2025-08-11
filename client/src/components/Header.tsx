@@ -1,17 +1,21 @@
-import { Newspaper, History, Search, LayoutDashboard } from "lucide-react"
+import { Newspaper, History, Search, LayoutDashboard, Menu } from "lucide-react"
 import { Button } from "./ui/button"
 import { ThemeToggle } from "./ui/theme-toggle"
 import { useNavigate, useLocation } from "react-router-dom"
 import { UserProfile } from "./UserProfile"
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { useState } from "react";
 
 interface HeaderProps {
-  isSidebarOpen: boolean;
-  setIsSidebarOpen: (isOpen: boolean) => void;
+  isDesktopSidebarOpen: boolean;
+  setIsDesktopSidebarOpen: (isOpen: boolean) => void;
+  setIsMobileSidebarOpen: (isOpen: boolean) => void;
 }
 
-export function Header({ isSidebarOpen, setIsSidebarOpen }: HeaderProps) {
+export function Header({ isDesktopSidebarOpen, setIsDesktopSidebarOpen, setIsMobileSidebarOpen }: HeaderProps) {
   const navigate = useNavigate()
   const location = useLocation()
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
   const handleNavigationAndScroll = (id: string) => {
     if (location.pathname !== '/') {
@@ -22,6 +26,7 @@ export function Header({ isSidebarOpen, setIsSidebarOpen }: HeaderProps) {
         element.scrollIntoView({ behavior: "smooth" });
       }
     }
+    setIsMobileMenuOpen(false); // Close mobile menu after navigation
   };
 
   return (
@@ -36,7 +41,9 @@ export function Header({ isSidebarOpen, setIsSidebarOpen }: HeaderProps) {
             Signal News
           </span>
         </div>
-        <div className="flex items-center gap-2">
+        
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex items-center gap-2">
           <Button variant="ghost" size="sm" onClick={() => handleNavigationAndScroll("top-search-section")}>
             <Search className="h-4 w-4 mr-1" />
             Generate
@@ -45,12 +52,41 @@ export function Header({ isSidebarOpen, setIsSidebarOpen }: HeaderProps) {
             <LayoutDashboard className="h-4 w-4 mr-1" />
             Dashboard
           </Button>
-          <Button variant="ghost" size="sm" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
+          <Button variant="ghost" size="sm" onClick={() => setIsDesktopSidebarOpen(!isDesktopSidebarOpen)}>
             <History className="h-4 w-4 mr-1" />
             History
           </Button>
           <ThemeToggle />
           <UserProfile />
+        </div>
+
+        {/* Mobile Navigation */}
+        <div className="md:hidden flex items-center gap-2">
+          <ThemeToggle />
+          <UserProfile />
+          <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <Menu className="h-6 w-6" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-[250px] sm:w-[300px]">
+              <nav className="flex flex-col gap-4 pt-8">
+                <Button variant="ghost" className="justify-start" onClick={() => handleNavigationAndScroll("top-search-section")}>
+                  <Search className="h-4 w-4 mr-2" />
+                  Generate
+                </Button>
+                <Button variant="ghost" className="justify-start" onClick={() => handleNavigationAndScroll("dashboard-section")}>
+                  <LayoutDashboard className="h-4 w-4 mr-2" />
+                  Dashboard
+                </Button>
+                <Button variant="ghost" className="justify-start" onClick={() => setIsMobileSidebarOpen(true)}> // Changed to setIsMobileSidebarOpen(true)
+                  <History className="h-4 w-4 mr-2" />
+                  History
+                </Button>
+              </nav>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
     </header>

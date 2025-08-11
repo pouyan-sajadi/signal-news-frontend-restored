@@ -4,6 +4,8 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Badge } from '@/components/ui/badge'
 import { Newspaper, Clock, ChevronDown, ChevronUp } from 'lucide-react'
 import { format, formatDistanceToNow } from 'date-fns'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 interface DailyNewsBriefProps {
   data: {
@@ -20,6 +22,7 @@ interface DailyNewsBriefProps {
 
 export function DailyNewsBrief({ data }: DailyNewsBriefProps) {
   if (!data) return null
+  const [selectedNewsItem, setSelectedNewsItem] = useState<any>(null);
 
   const formatTimestamp = (timestamp: string) => {
     const date = new Date(timestamp); // This is now correctly parsed as UTC
@@ -50,67 +53,89 @@ export function DailyNewsBrief({ data }: DailyNewsBriefProps) {
   };
 
   return (
-    <Card className="h-full bg-white/70 backdrop-blur-sm border-0 shadow-xl hover:shadow-2xl transition-all duration-300">
-      <CardHeader className="pb-2">
-        <CardTitle className="flex items-center gap-2 text-lg font-bold text-gray-800">
-          <div className="p-2 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-lg">
-            <Newspaper className="h-5 w-5 text-white" />
-          </div>
-          Intelligent News Brief
-        </CardTitle>
-        <p className="text-sm text-gray-600">What’s happening in tech today? - Generated {formatTimestamp(data.created_at)}</p>
-      </CardHeader>
-      <CardContent className="pt-1 h-[calc(100%-120px)]">
-        <ScrollArea className="h-full pr-2">
-          <div className="space-y-4">
-            {data.hot_topics.map((topic, index) => {
-              const [isExpanded, setIsExpanded] = useState(false);
-              const TRUNCATE_LENGTH = 80; // Adjusted for compactness
-              const isTruncated = topic.summary.length > TRUNCATE_LENGTH;
-              const displayedSummary = isExpanded || !isTruncated
-                ? topic.summary
-                : topic.summary.substring(0, TRUNCATE_LENGTH) + '...';
+    <>
+      <Card className="h-full bg-white/70 backdrop-blur-sm border-0 shadow-xl hover:shadow-2xl transition-all duration-300">
+        <CardHeader className="pb-2">
+          <CardTitle className="flex items-center gap-2 text-lg font-bold text-gray-800">
+            <div className="p-2 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-lg">
+              <Newspaper className="h-5 w-5 text-white" />
+            </div>
+            Intelligent News Brief
+          </CardTitle>
+          <p className="text-sm text-gray-600">What’s happening in tech today? - Generated {formatTimestamp(data.created_at)}</p>
+        </CardHeader>
+        <CardContent className="pt-1 h-[calc(100%-120px)]">
+          <ScrollArea className="h-full pr-2">
+            <div className="space-y-4">
+              {data.hot_topics.map((topic, index) => {
+                const [isExpanded, setIsExpanded] = useState(false);
+                const TRUNCATE_LENGTH = 80; // Adjusted for compactness
+                const isTruncated = topic.summary.length > TRUNCATE_LENGTH;
+                const displayedSummary = isExpanded || !isTruncated
+                  ? topic.summary
+                  : topic.summary.substring(0, TRUNCATE_LENGTH) + '...';
 
-              return (
-                <div
-                  key={index}
-                  className="group p-4 rounded-lg bg-white/50 hover:bg-white/80 transition-all duration-200 border border-gray-100 hover:border-gray-200"
-                >
-                  <div className="flex items-start justify-between gap-3 mb-2">
-                    <h3
-                      className="font-semibold text-gray-900 text-sm leading-tight cursor-pointer"
-                      onClick={() => window.open(topic.url, '_blank')}
-                    >
-                      {topic.title}
-                    </h3>
-                  </div>
-                  
-                  <p className="text-xs text-gray-600 mb-2 leading-relaxed">
-                    {displayedSummary}
-                  </p>
-                  
-                  {isTruncated && (
-                    <button
-                      onClick={() => setIsExpanded(!isExpanded)}
-                      className="flex items-center text-blue-600 hover:text-blue-800 text-xs font-medium focus:outline-none"
-                    >
-                      {isExpanded ? 'Show Less' : 'Read More'}
-                      {isExpanded ? <ChevronUp className="h-3 w-3 ml-1" /> : <ChevronDown className="h-3 w-3 ml-1" />}
-                    </button>
-                  )}
+                return (
+                  <div
+                    key={index}
+                    className="group p-4 rounded-lg bg-white/50 hover:bg-white/80 transition-all duration-200 border border-gray-100 hover:border-gray-200"
+                  >
+                    <div className="flex items-start justify-between gap-3 mb-2">
+                      <h3
+                        className="font-semibold text-gray-900 text-sm leading-tight cursor-pointer"
+                        onClick={() => setSelectedNewsItem(topic)}
+                      >
+                        {topic.title}
+                      </h3>
+                    </div>
+                    
+                    <p className="text-xs text-gray-600 mb-2 leading-relaxed">
+                      {displayedSummary}
+                    </p>
+                    
+                    {isTruncated && (
+                      <button
+                        onClick={() => setIsExpanded(!isExpanded)}
+                        className="flex items-center text-blue-600 hover:text-blue-800 text-xs font-medium focus:outline-none"
+                      >
+                        {isExpanded ? 'Show Less' : 'Read More'}
+                        {isExpanded ? <ChevronUp className="h-3 w-3 ml-1" /> : <ChevronDown className="h-3 w-3 ml-1" />}
+                      </button>
+                    )}
 
-                  <div className="flex items-center justify-between mt-2">
-                    <div className="flex items-center gap-1 text-xs text-gray-500">
-                      <Clock className="h-3 w-3" />
-                      {formatTimestamp(topic.publishedAt)}
+                    <div className="flex items-center justify-between mt-2">
+                      <div className="flex items-center gap-1 text-xs text-gray-500">
+                        <Clock className="h-3 w-3" />
+                        {formatTimestamp(topic.publishedAt)}
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
+          </ScrollArea>
+        </CardContent>
+      </Card>
+      <Dialog open={!!selectedNewsItem} onOpenChange={() => setSelectedNewsItem(null)}>
+        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>{selectedNewsItem?.title}</DialogTitle>
+            <DialogDescription>
+              Source: {selectedNewsItem?.source} | Published: {selectedNewsItem?.publishedAt ? format(new Date(selectedNewsItem.publishedAt), "MMM dd, yyyy HH:mm") : 'N/A'}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="mt-4">
+            <p className="text-sm text-gray-700 leading-relaxed">{selectedNewsItem?.summary}</p>
+            {selectedNewsItem?.url && (
+              <Button asChild className="mt-4">
+                <a href={selectedNewsItem.url} target="_blank" rel="noopener noreferrer">
+                  Read Full Article
+                </a>
+              </Button>
+            )}
           </div>
-        </ScrollArea>
-      </CardContent>
-    </Card>
+        </DialogContent>
+      </Dialog>
+    </>
   )
 }

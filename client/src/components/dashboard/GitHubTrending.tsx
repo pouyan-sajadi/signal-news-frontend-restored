@@ -164,6 +164,10 @@ export function GitHubTrending({ data }: GitHubTrendingProps) {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-blue-600 hover:text-blue-800 transition-colors"
+                      onClick={() => toast({
+                        title: "Opening Repository",
+                        description: `Navigating to ${repo.title}`,
+                      })}
                     >
                       <ExternalLink className="h-4 w-4" />
                     </a>

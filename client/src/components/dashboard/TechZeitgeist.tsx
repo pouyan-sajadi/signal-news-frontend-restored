@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { Brain, TrendingUp, TrendingDown, Minus } from 'lucide-react'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
 interface TechZeitgeistProps {
   data: {
@@ -17,6 +18,7 @@ interface TechZeitgeistProps {
 
 export function TechZeitgeist({ data }: TechZeitgeistProps) {
   if (!data) return null
+  const [selectedKeyword, setSelectedKeyword] = useState<any>(null);
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
@@ -52,50 +54,66 @@ export function TechZeitgeist({ data }: TechZeitgeistProps) {
   const displayKeywords = data.keywords.slice(0, 20)
 
   return (
-    <Card className="h-full bg-white/70 backdrop-blur-sm border-0 shadow-xl hover:shadow-2xl transition-all duration-300">
-      <CardHeader className="pb-1">
-        <CardTitle className="flex items-center gap-2 text-lg font-bold text-gray-800">
-          <div className="p-2 bg-gradient-to-r from-green-500 to-teal-500 rounded-lg">
-            <Brain className="h-5 w-5 text-white" />
-          </div>
-          Tech Zeitgeist
-        </CardTitle>
-        <p className="text-sm text-gray-600">What’s at the center of today’s buzz?</p>
-      </CardHeader>
-      <CardContent className="pt-1">
-        <div className="h-52">
-          <div className="flex flex-wrap gap-2 h-full overflow-y-auto pr-1">
-              {displayKeywords.map((keyword, index) => (
-                <Tooltip key={index}>
-                  <TooltipTrigger asChild>
-                    <Badge
-                      variant="outline"
-                      className={`${getTrendColor(keyword.trend)} ${getWordSize(keyword.frequency, maxFrequency)}
-                        transition-all duration-200 cursor-pointer border flex items-center gap-1 px-3 py-1`} >
-                      {getTrendIcon(keyword.trend)}
-                      {keyword.word}
-                    </Badge>
-                  </TooltipTrigger>
-                  <TooltipContent className="max-w-xs bg-white border border-gray-200 shadow-lg">
-                    <div className="p-2">
-                      <p className="font-semibold text-gray-900 mb-1">{keyword.word}</p>
-                      <p className="text-sm text-gray-600 mb-2">
-                        {keyword.desc}
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        {keyword.frequency.toLocaleString()} mentions
-                      </p>
-                    </div>
-                  </TooltipContent>
-                </Tooltip>
-              ))}
+    <>
+      <Card className="h-full bg-white/70 backdrop-blur-sm border-0 shadow-xl hover:shadow-2xl transition-all duration-300">
+        <CardHeader className="pb-1">
+          <CardTitle className="flex items-center gap-2 text-lg font-bold text-gray-800">
+            <div className="p-2 bg-gradient-to-r from-green-500 to-teal-500 rounded-lg">
+              <Brain className="h-5 w-5 text-white" />
             </div>
-        </div>
-        <div className="mt-2 flex items-center gap-2 text-sm text-gray-600">
-          <Brain className="h-4 w-4 text-purple-500" />
-          <span>AI and ML dominating tech discourse</span>
-        </div>
-      </CardContent>
-    </Card>
+            Tech Zeitgeist
+          </CardTitle>
+          <p className="text-sm text-gray-600">What’s at the center of today’s buzz?</p>
+        </CardHeader>
+        <CardContent className="pt-1">
+          <div className="h-52">
+            <div className="flex flex-wrap gap-2 h-full overflow-y-auto pr-1">
+                {displayKeywords.map((keyword, index) => (
+                  <Tooltip key={index}>
+                    <TooltipTrigger asChild>
+                      <Badge
+                        variant="outline"
+                        className={`${getTrendColor(keyword.trend)} ${getWordSize(keyword.frequency, maxFrequency)}
+                          transition-all duration-200 cursor-pointer border flex items-center gap-1 px-3 py-1`} 
+                        onClick={() => setSelectedKeyword(keyword)}>
+                        {getTrendIcon(keyword.trend)}
+                        {keyword.word}
+                      </Badge>
+                    </TooltipTrigger>
+                    <TooltipContent className="max-w-xs bg-white border border-gray-200 shadow-lg">
+                      <div className="p-2">
+                        <p className="font-semibold text-gray-900 mb-1">{keyword.word}</p>
+                        <p className="text-sm text-gray-600 mb-2">
+                          {keyword.desc}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {keyword.frequency.toLocaleString()} mentions
+                        </p>
+                      </div>
+                    </TooltipContent>
+                  </Tooltip>
+                ))}
+              </div>
+          </div>
+          <div className="mt-2 flex items-center gap-2 text-sm text-gray-600">
+            <Brain className="h-4 w-4 text-purple-500" />
+            <span>AI and ML dominating tech discourse</span>
+          </div>
+        </CardContent>
+      </Card>
+      <Dialog open={!!selectedKeyword} onOpenChange={() => setSelectedKeyword(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{selectedKeyword?.word}</DialogTitle>
+            <DialogDescription>
+              Trend: {selectedKeyword?.trend} | Mentions: {selectedKeyword?.frequency}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="mt-4">
+            <p className="text-sm text-gray-700 leading-relaxed">{selectedKeyword?.desc}</p>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </>
   )
 }
