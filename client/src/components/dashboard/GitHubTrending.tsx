@@ -72,7 +72,7 @@ export function GitHubTrending({ data }: GitHubTrendingProps) {
         fill="white"
         textAnchor={x > cx ? 'start' : 'end'}
         dominantBaseline="central"
-        fontSize="12"
+        fontSize="13"
         fontWeight="bold"
       >
         {`${percentage}%`}
@@ -93,7 +93,7 @@ export function GitHubTrending({ data }: GitHubTrendingProps) {
           <p className="text-sm text-gray-600">Trending programming languages</p>
         </CardHeader>
         <CardContent className="pt-1">
-          <div className="h-64">
+          <div className="h-52">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
@@ -102,8 +102,8 @@ export function GitHubTrending({ data }: GitHubTrendingProps) {
                   cy="50%"
                   labelLine={false}
                   label={renderCustomizedLabel}
-                  innerRadius={40}
-                  outerRadius={80}
+                  innerRadius={20}
+                  outerRadius={70}
                   paddingAngle={2}
                   dataKey="count"
                   onClick={handleSliceClick}
@@ -121,7 +121,7 @@ export function GitHubTrending({ data }: GitHubTrendingProps) {
                   verticalAlign="bottom"
                   height={36}
                   formatter={(value, entry: any) => (
-                    <span style={{ color: entry.color, fontSize: '12px' }}>
+                    <span style={{ color: entry.color, fontSize: '13px' }}>
                       {value}
                     </span>
                   )}
@@ -129,7 +129,7 @@ export function GitHubTrending({ data }: GitHubTrendingProps) {
               </PieChart>
             </ResponsiveContainer>
           </div>
-          <div className="mt-4 flex items-center gap-2 text-sm text-gray-600">
+          <div className="mt-2 flex items-center gap-2 text-sm text-gray-600">
             <TrendingUp className="h-4 w-4 text-green-500" />
             <span>Based on {totalRepos.toLocaleString()} repositories</span>
           </div>

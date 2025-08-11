@@ -1,9 +1,8 @@
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
-import { HeroSection } from "../components/home/HeroSection"
+import { useNavigate, useOutletContext } from "react-router-dom"
 import { Dashboard } from "./Dashboard"
-import { GenerateReport } from "../components/home/GenerateReport";
-import { ReportHistory } from "../components/home/ReportHistory";
+import { TopSearchSection } from "../components/home/TopSearchSection";
+
 import { generateReport, FinalReportData } from "../api/reports"
 import { useToast } from "../hooks/useToast"
 import { Card } from "../components/ui/card"
@@ -11,6 +10,10 @@ import { Progress } from "../components/ui/progress"
 import { Button, ButtonProps } from "../components/ui/button"
 import { X, Search, BarChart3, Target, Brain, Edit3 } from "lucide-react"
 import { Report } from "../components/home/ReportHistory";
+
+interface OutletContext {
+  setReportCount: React.Dispatch<React.SetStateAction<number>>;
+}
 
 export interface ReportPreferences {
   focus: string
@@ -32,6 +35,7 @@ export function HomePage() {
   const [currentStepIndex, setCurrentStepIndex] = useState(0)
   const navigate = useNavigate()
   const { toast } = useToast()
+  const { setReportCount } = useOutletContext<OutletContext>();
 
   const steps = [
     {
@@ -115,6 +119,7 @@ export function HomePage() {
       })
 
       console.log("Report generated successfully:", finalReport)
+      setReportCount(prev => prev + 1); // Increment report count
 
       // Construct the Report object to pass to the ReportPage
       const reportToPass: Report = {
@@ -159,27 +164,21 @@ export function HomePage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <HeroSection />
-      <div className="mt-8">
+      <TopSearchSection
+        topic={topic}
+        setTopic={setTopic}
+        preferences={preferences}
+        setPreferences={setPreferences}
+        isGenerating={isGenerating}
+        handleGenerateReport={handleGenerateReport}
+        processingStep={processingStep}
+        progress={progress}
+        currentStepIndex={currentStepIndex}
+        refinedTopic={refinedTopic}
+        handleCancelGeneration={handleCancelGeneration}
+      />
+      <div className="mt-8 flex-grow">
         <Dashboard />
-      </div>
-      <div className="mt-12">
-        <GenerateReport
-          topic={topic}
-          setTopic={setTopic}
-          preferences={preferences}
-          setPreferences={setPreferences}
-          isGenerating={isGenerating}
-          handleGenerateReport={handleGenerateReport}
-          progress={progress}
-          currentStepIndex={currentStepIndex}
-          refinedTopic={refinedTopic}
-          processingStep={processingStep}
-          handleCancelGeneration={handleCancelGeneration}
-        />
-        <div className="mt-12">
-          <ReportHistory />
-        </div>
       </div>
     </div>
   )

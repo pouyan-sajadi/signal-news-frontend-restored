@@ -125,7 +125,7 @@ export function MarketPredictions({ data }: MarketPredictionsProps) {
             className="w-3 h-3 rounded-full"
             style={{ backgroundColor: getCategoryColor(category) }}
           />
-          <span className="text-xs text-gray-600">{category}</span>
+          <span className="text-sm text-gray-600">{category}</span>
         </div>
       ))}
     </div>
@@ -146,7 +146,7 @@ export function MarketPredictions({ data }: MarketPredictionsProps) {
         <p className="text-sm text-gray-600">Market consensus vs financial commitment</p>
       </CardHeader>
       <CardContent className="pt-1">
-        <div className="h-48">
+        <div className="h-40">
           <ResponsiveContainer width="100%" height="100%">
             <ScatterChart margin={{ top: 15, right: 5, bottom: 5, left: 40 }}>
               <XAxis
@@ -156,7 +156,7 @@ export function MarketPredictions({ data }: MarketPredictionsProps) {
                 tickFormatter={formatXAxisTick}
                 allowDuplicatedCategory={false}
                 name="Market Consensus"
-                tick={{ fontSize: 12 }}
+                tick={{ fontSize: 13 }}
               />
               <YAxis
                 type="number"
@@ -165,10 +165,10 @@ export function MarketPredictions({ data }: MarketPredictionsProps) {
                 domain={[minVolume * 0.8, maxVolume * 1.2]}
                 tickFormatter={formatYAxisTick}
                 name="Total Money Invested (Log Scale)"
-                tick={{ fontSize: 12 }}
-                label={{ value: "Total Money Invested", angle: -90, position: 'insideLeft', dx: 0, dy: 60, fill: '#64748b', fontSize: 12 }}
+                tick={{ fontSize: 13 }}
+                label={{ value: "Total Money Invested", angle: -90, position: 'insideLeft', dx: 0, dy: 60, fill: '#64748b', fontSize: 13 }}
               />
-              <ReferenceLine x={0} stroke="#e2e8f0" strokeDasharray="3 3" label={{ value: 'High Controversy', position: 'top', fill: '#64748b', fontSize: 10 }} />
+              <ReferenceLine x={0} stroke="#e2e8f0" strokeDasharray="3 3" label={{ value: 'High Controversy', position: 'top', fill: '#64748b', fontSize: 11 }} />
               <Tooltip content={<CustomTooltip />} cursor={{ strokeDasharray: '3 3' }} />
               <Scatter data={transformedData}>
                 {transformedData.map((entry, index) => (
@@ -183,7 +183,7 @@ export function MarketPredictions({ data }: MarketPredictionsProps) {
           </ResponsiveContainer>
         </div>
         <CustomLegend />
-        <div className="mt-2 flex items-center gap-2 text-sm text-gray-600">
+        <div className="mt-1 flex items-center gap-2 text-sm text-gray-600">
           <TrendingUp className="h-4 w-4 text-blue-500" />
           <span>High interest in AI and hardware predictions</span>
         </div>

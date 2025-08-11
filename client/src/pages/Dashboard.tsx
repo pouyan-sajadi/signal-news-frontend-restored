@@ -94,19 +94,19 @@ export function Dashboard() {
   }
 
   return (
-    <div className="bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100 p-6">
+    <div id="dashboard-section" className="bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100 p-4">
       <div className="w-full">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent mb-4">
+        <div className="mb-4">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent mb-3">
             Daily Tech Pulse Dashboard
           </h1>
-          <p className="text-lg text-gray-600 max-w-3xl">
+          <p className="text-base text-gray-600 max-w-3xl">
             Your comprehensive overview of today's technology landscape - from developer activity to market predictions
           </p>
           {data?.news?.created_at && (
-            <div className="mt-4 flex items-center text-sm text-gray-500 bg-gray-100 p-2 rounded-md">
-              <Clock className="h-4 w-4 mr-2" />
+            <div className="mt-3 flex items-center text-xs text-gray-500 bg-gray-100 p-1 rounded-md">
+              <Clock className="h-3 w-3 mr-1" />
               <span>Last updated: {getFormattedTimestamp()}</span>
             </div>
           )}
@@ -114,7 +114,7 @@ export function Dashboard() {
 
         {/* Dashboard Grid */}
         <TooltipProvider delayDuration={100}>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[400px]">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 h-[350px]">
             {/* GitHub Trending - Top Left */}
             <div className="lg:row-span-1">
               <GitHubTrending data={data.github} />

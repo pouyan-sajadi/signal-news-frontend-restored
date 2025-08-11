@@ -42,10 +42,10 @@ export function TechZeitgeist({ data }: TechZeitgeistProps) {
 
   const getWordSize = (frequency: number, maxFreq: number) => {
     const ratio = frequency / maxFreq
-    if (ratio > 0.8) return 'text-lg font-bold'
-    if (ratio > 0.6) return 'text-base font-semibold'
-    if (ratio > 0.4) return 'text-sm font-medium'
-    return 'text-xs font-normal'
+    if (ratio > 0.8) return 'text-xl font-bold'
+    if (ratio > 0.6) return 'text-lg font-semibold'
+    if (ratio > 0.4) return 'text-base font-medium'
+    return 'text-sm font-normal'
   }
 
   const maxFrequency = Math.max(...data.keywords.map(k => k.frequency))
@@ -63,7 +63,7 @@ export function TechZeitgeist({ data }: TechZeitgeistProps) {
         <p className="text-sm text-gray-600">Trending concepts and buzzwords</p>
       </CardHeader>
       <CardContent className="pt-1">
-        <div className="h-64">
+        <div className="h-52">
           <div className="flex flex-wrap gap-2 h-full overflow-y-auto pr-1">
               {displayKeywords.map((keyword, index) => (
                 <Tooltip key={index}>
@@ -91,7 +91,7 @@ export function TechZeitgeist({ data }: TechZeitgeistProps) {
               ))}
             </div>
         </div>
-        <div className="mt-4 flex items-center gap-2 text-sm text-gray-600">
+        <div className="mt-2 flex items-center gap-2 text-sm text-gray-600">
           <Brain className="h-4 w-4 text-purple-500" />
           <span>AI and ML dominating tech discourse</span>
         </div>

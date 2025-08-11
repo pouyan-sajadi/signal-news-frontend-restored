@@ -32,7 +32,7 @@ export function ProductHuntInsights({ data }: ProductHuntInsightsProps) {
         </CardTitle>
         <p className="text-sm text-gray-600">Connections between top product categories</p>
       </CardHeader>
-      <CardContent className="pt-1 h-[calc(100%-100px)]">
+      <CardContent className="pt-1 h-[calc(100%-80px)]">
         <ProductHuntSankeyChart data={sankeyData.product_hunt_tag_connections} />
       </CardContent>
     </Card>

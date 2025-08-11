@@ -60,7 +60,7 @@ export function TopicInput({
           <Button
             type="submit"
             size="lg"
-            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 gap-2"
+            className={`bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 gap-2 ${!value.trim() || disabled ? '' : 'animate-pulse'}`}
             disabled={!value.trim() || disabled}
           >
             <Sparkles className="h-5 w-5" />
