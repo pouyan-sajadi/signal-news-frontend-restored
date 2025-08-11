@@ -164,7 +164,7 @@ export function HomePage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 flex flex-col flex-grow">
+    <div className="container mx-auto py-8 flex flex-col flex-grow">
       <HeroSection />
       <div className="mt-8 flex-grow">
         <Dashboard />

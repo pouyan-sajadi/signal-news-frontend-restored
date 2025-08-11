@@ -48,10 +48,10 @@ export function HeroSection() {
         transform: 'scale(2)' // Make the pattern larger
       }}></div>
       <div className="relative z-10 text-center px-4 max-w-3xl rounded-3xl p-8 bg-white/10 backdrop-blur-sm shadow-2xl">
-        <h1 className="text-3xl font-bold leading-tight mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-200 to-purple-200">
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold leading-tight mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-200 to-purple-200">
           Signal News: Clarity in the Chaos
         </h1>
-        <p className="text-lg sm:text-xl md:text-2xl font-light mb-8">
+        <p className="text-base sm:text-lg md:text-xl font-light mb-8">
           Unlock intelligent, noise-free, and easily digestible overviews of the tech landscape. Our LLM-powered search delivers nuanced, multi-angle reports in seconds, transforming how you understand the world.
         </p>
         <div className="flex flex-col sm:flex-row justify-center gap-4">

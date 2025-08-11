@@ -149,7 +149,7 @@ export function ReportHistory({ isSidebar = false, isSidebarOpen = true, reportC
                 className="flex items-center justify-between p-2 border rounded-md hover:bg-muted/50 transition-colors"
               >
                 <div className="flex-1 min-w-0 mr-2">
-                  <p className="font-medium truncate">News report on: {report.refined_topic || report.topic}</p>
+                  <p className="font-medium">News report on: {report.refined_topic || report.topic}</p>
                   <p className="text-xs text-muted-foreground">
                     Generated {formatTimestamp(report.timestamp)}
                   </p>

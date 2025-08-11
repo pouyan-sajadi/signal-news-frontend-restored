@@ -80,7 +80,7 @@ export function Header({ isDesktopSidebarOpen, setIsDesktopSidebarOpen, setIsMob
                   <LayoutDashboard className="h-4 w-4 mr-2" />
                   Dashboard
                 </Button>
-                <Button variant="ghost" className="justify-start" onClick={() => setIsMobileSidebarOpen(true)}> // Changed to setIsMobileSidebarOpen(true)
+                <Button variant="ghost" className="justify-start" onClick={() => setIsMobileSidebarOpen(true)}> {/* Changed to setIsMobileSidebarOpen(true) */}
                   <History className="h-4 w-4 mr-2" />
                   History
                 </Button>

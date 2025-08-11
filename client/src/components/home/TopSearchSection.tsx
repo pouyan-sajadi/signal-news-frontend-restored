@@ -79,7 +79,7 @@ export function TopSearchSection({
         Transform any topic into a comprehensive, AI-generated news report in real-time.
         Get noise-free content, instant intelligence, and personalized reports.
       </p>
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-full mx-auto">
         {!isGenerating ? (
           <TopicInput
             value={topic}
