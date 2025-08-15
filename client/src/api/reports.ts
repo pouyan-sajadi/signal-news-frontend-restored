@@ -4,6 +4,7 @@ import { saveHistory } from './history';
 import { supabase } from '../lib/supabaseClient';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000';
+// const BACKEND_URL = 'http://localhost:8000'; // Hardcoded for local testing
 
 // Define the structure of the final report data from the backend
 export interface FinalReportData {
@@ -70,12 +71,7 @@ export const generateReport = async (data: {
         }
       };
 
-      ws.onclose = (event) => {
-        console.log('WebSocket closed:', event);
-        if (!event.wasClean) {
-          reject(new Error(`WebSocket connection closed unexpectedly: Code ${event.code}, Reason: ${event.reason}`));
-        }
-      };
+      
 
       ws.onerror = (error) => {
         console.error('WebSocket error:', error);
@@ -91,13 +87,6 @@ export const generateReport = async (data: {
 
 import { Report } from '../pages/ReportPage';
 
-// The getReport, getReportHistory, deleteReport, getTrendingTopics, getDailyNews functions
-// will remain mocked for now, or need to be updated to fetch from the backend if corresponding
-// endpoints exist or are added.
-// For getReport, since the final report is streamed via WebSocket, this function might become
-// obsolete or need to fetch from a persistent storage if implemented in the backend.
-// For now, I will comment out the mock and leave the actual API call commented out as well,
-// as it's not clear if the backend has a /reports/:id endpoint.
 export const getReport = async (jobId: string): Promise<Report> => {
   try {
     const response = await api.get(`${BACKEND_URL}/reports/${jobId}`);
@@ -128,9 +117,7 @@ export const getReportHistory = async (): Promise<Report[]> => {
       },
     });
     // The backend now returns the correct array of report objects, so we just need to type it correctly.
-    if (response.data && response.data.length > 0) {
-      console.log(`API fetch (getReportHistory): First item timestamp is ${response.data[0].timestamp}`);
-    }
+    
     return response.data as Report[];
   } catch (error: any) {
     console.error("Error fetching report history:", error);

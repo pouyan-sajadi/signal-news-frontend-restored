@@ -14,7 +14,7 @@ interface ProductHuntInsightsProps {
 }
 
 export function ProductHuntInsights({ data }: ProductHuntInsightsProps) {
-  console.log("ProductHuntInsights data:", JSON.stringify(data, null, 2));
+  
   if (!data || !data.product_hunt_tag_connections) {
     return (
       <Card className="h-full bg-white/70 backdrop-blur-sm border-0 shadow-xl flex items-center justify-center">

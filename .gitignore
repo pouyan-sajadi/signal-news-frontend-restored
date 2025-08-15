@@ -3,5 +3,9 @@ server/.env
 server/package-lock.json
 client/node_modules/
 client/package-lock.json
+client/.env
 node_modules/
 package-lock.json
+
+# Internal Docs
+UI_details.md

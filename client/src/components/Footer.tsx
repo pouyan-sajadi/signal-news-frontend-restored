@@ -11,15 +11,13 @@ export function Footer() {
           <p>&copy; {new Date().getFullYear()} The Signal. All rights reserved.</p>
           <p>Built with ❤️ for learning and exploration.</p>
         </div>
-        <div className="md:mx-auto">
-          <div className="flex justify-center">
+        <div className="text-center md:mx-auto">
           <Button variant="link" onClick={() => setIsAboutExpanded(!isAboutExpanded)} className="font-bold">
             About The Signal
           </Button>
         </div>
-        </div>
         <div className="flex items-center space-x-4 text-center md:ml-auto">
-          <p>Contact: <a href="mailto:pouyan.sajadi@gmail.com" className="hover:underline">info@example.com</a></p>
+          <p>Contact: <a href="mailto:pouyan.sajadi@gmail.com" className="hover:underline">pouyan.sajadi@gmail.com</a></p>
           {/* Placeholder for social media/GitHub icons */}
         </div>
       </div>

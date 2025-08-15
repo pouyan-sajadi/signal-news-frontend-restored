@@ -5,6 +5,7 @@ import JSONbig from 'json-bigint';
 
 const localApi = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000', // Set your backend URL here
+// baseURL: 'http://127.0.0.1:8000', // Hardcoded for local testing
   headers: {
     'Content-Type': 'application/json',
   },

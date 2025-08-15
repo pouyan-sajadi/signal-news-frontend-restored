@@ -48,7 +48,7 @@ export function LayoutWithSidebar({ children, reportCount, setReportCount }: Lay
       </aside>
 
       {/* Mobile Sidebar (Sheet) */}
-      {/* <Sheet open={isMobileSidebarOpen} onOpenChange={setIsMobileSidebarOpen}>
+      <Sheet open={isMobileSidebarOpen} onOpenChange={setIsMobileSidebarOpen}>
         <SheetContent side="left" className="w-64 p-4">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold flex items-center gap-2">
@@ -67,11 +67,15 @@ export function LayoutWithSidebar({ children, reportCount, setReportCount }: Lay
             <ReportHistory isSidebar={true} isMobileSidebarOpen={true} reportCount={reportCount} />
           </div>
         </SheetContent>
-      </Sheet> */}
+      </Sheet>
 
       {/* Main Content */}
       <main className="flex-1 flex flex-col">
-        <Header />
+        <Header 
+          isDesktopSidebarOpen={isDesktopSidebarOpen}
+          setIsDesktopSidebarOpen={setIsDesktopSidebarOpen}
+          setIsMobileSidebarOpen={setIsMobileSidebarOpen}
+        />
         <div className="flex-grow overflow-y-auto">
           {children || <Outlet context={{ setReportCount }} />}
         </div>

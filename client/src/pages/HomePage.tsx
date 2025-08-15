@@ -1,5 +1,5 @@
-import { useState } from "react"
-import { useNavigate, useOutletContext } from "react-router-dom"
+import { useEffect, useState } from "react"
+import { useNavigate, useOutletContext, useLocation } from "react-router-dom"
 import { Dashboard } from "./Dashboard"
 import { TopSearchSection } from "../components/home/TopSearchSection";
 import { HeroSection } from "../components/home/HeroSection";
@@ -37,6 +37,20 @@ export function HomePage() {
   const navigate = useNavigate()
   const { toast } = useToast()
   const { setReportCount } = useOutletContext<OutletContext>();
+  const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
+    if (location.state?.scrollToId) {
+      const element = document.getElementById(location.state.scrollToId);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, [location.state]);
 
   const steps = [
     {
@@ -86,7 +100,7 @@ export function HomePage() {
       return
     }
 
-    console.log("Starting report generation for topic:", topic)
+    
     setIsGenerating(true)
     setProgress(0)
     setCurrentStepIndex(0)
@@ -96,7 +110,7 @@ export function HomePage() {
         topic: topic.trim(),
         preferences,
         onProgress: (message: string, progressData?: any) => {
-          console.log("Processing step:", message, progressData)
+          
           setProcessingStep(message)
           
           if (progressData && progressData.step) {
@@ -119,7 +133,7 @@ export function HomePage() {
         }
       })
 
-      console.log("Report generated successfully:", finalReport)
+      
       setReportCount(prev => prev + 1); // Increment report count
 
       // Construct the Report object to pass to the ReportPage
@@ -155,8 +169,8 @@ export function HomePage() {
     }
   }
 
-  const handleCancelGeneration = () => {
-    console.log("Report generation cancelled")
+  
+    const handleCancelGeneration = () => {
     setIsGenerating(false)
     setProcessingStep("")
     setProgress(0)

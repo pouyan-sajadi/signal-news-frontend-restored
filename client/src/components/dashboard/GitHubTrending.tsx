@@ -150,7 +150,7 @@ export function GitHubTrending({ data }: GitHubTrendingProps) {
                 key={index}
                 className="p-4 border border-gray-200 rounded-lg hover:border-gray-300 transition-colors bg-gray-50"
               >
-                {console.log("Repo data:", repo)}
+                
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">{repo.title}</h3>
                 <div className="flex items-start justify-between mb-2">
                   <div></div>

@@ -25,7 +25,7 @@ export function ReportContent({ content }: ReportContentProps) {
   const toggleAudio = () => {
     setIsPlaying(!isPlaying)
     // Text-to-speech functionality would be implemented here
-    console.log(isPlaying ? "Stopping audio" : "Starting audio")
+    
   }
 
   return (

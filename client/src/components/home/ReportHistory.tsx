@@ -30,7 +30,7 @@ export function ReportHistory({ isSidebar = false, isSidebarOpen = true, reportC
         const data = await getReportHistory();
         const sortedData = data.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
         if (sortedData && sortedData.length > 0) {
-          console.log(`Component pre-render (ReportHistory): First item timestamp is ${sortedData[0].timestamp}`);
+          
         }
         setHistory(sortedData);
       } catch (err) {

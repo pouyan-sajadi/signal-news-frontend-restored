@@ -34,7 +34,7 @@ export function Dashboard() {
         const dashboardData = await getDashboardData();
         setData(dashboardData);
 
-        console.log('Dashboard data loaded successfully')
+        
       } catch (error) {
         console.error('Error fetching dashboard data:', error)
         toast({
@@ -96,7 +96,7 @@ export function Dashboard() {
   }
 
   return (
-    <div id="dashboard-section" className="bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100 p-4 mb-32">
+    <div id="dashboard-section" className="bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 p-4 mb-32">
       <div className="w-full">
         {/* Header */}
         <div className="mb-4 text-center">

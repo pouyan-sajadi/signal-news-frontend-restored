@@ -63,7 +63,7 @@ export function ReportPage() {
       // If not in state, fetch from API
       try {
         setLoading(true);
-        console.log("Fetching report from API for ID:", id);
+        
         const fetchedReport = await getReport(id);
         setReport(fetchedReport);
       } catch (error) {
@@ -218,11 +218,11 @@ export function ReportPage() {
             <Download className="h-4 w-4" />
             Export
           </Button>
-          <Button variant="outline" size="sm" className="gap-2">
+          {/* <Button variant="outline" size="sm" className="gap-2">
             <Bookmark className="h-4 w-4" />
             Save
-          </Button>
-          <Button 
+          </Button> */}
+          {/* <Button 
             variant="outline" 
             size="sm" 
             onClick={() => setShowStats(!showStats)}
@@ -230,7 +230,7 @@ export function ReportPage() {
           >
             <MoreHorizontal className="h-4 w-4" />
             Stats
-          </Button>
+          </Button> */}
         </div>
       </div>
 
@@ -277,7 +277,7 @@ export function ReportPage() {
       <RelatedTopics 
         topics={[]} // Related topics are not available in the current backend response
         onTopicSelect={(topic) => {
-          console.log("Selected related topic:", topic)
+          
           navigate("/", { state: { selectedTopic: topic } })
         }}
       />
