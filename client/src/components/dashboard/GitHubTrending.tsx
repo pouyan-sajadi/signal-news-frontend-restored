@@ -60,7 +60,7 @@ export function GitHubTrending({ data }: GitHubTrendingProps) {
   const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, name, percentage }: any) => {
     const RADIAN = Math.PI / 180;
     // Move the label closer to the center by adjusting the multiplier (e.g., from 0.5 to 0.3)
-    const radius = innerRadius + (outerRadius - innerRadius) * 0.3;
+    const radius = innerRadius + (outerRadius - innerRadius) * 0.4;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
     const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
