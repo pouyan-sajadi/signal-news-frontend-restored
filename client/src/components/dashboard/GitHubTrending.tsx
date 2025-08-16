@@ -58,27 +58,28 @@ export function GitHubTrending({ data }: GitHubTrendingProps) {
   }
 
   const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, name, percentage }: any) => {
-    const RADIAN = Math.PI / 180
-    const radius = innerRadius + (outerRadius - innerRadius) * 0.5
-    const x = cx + radius * Math.cos(-midAngle * RADIAN)
-    const y = cy + radius * Math.sin(-midAngle * RADIAN)
+    const RADIAN = Math.PI / 180;
+    // Move the label closer to the center by adjusting the multiplier (e.g., from 0.5 to 0.3)
+    const radius = innerRadius + (outerRadius - innerRadius) * 0.3;
+    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+    const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
-    if (parseFloat(percentage) < 5) return null
+    if (parseFloat(percentage) < 5) return null;
 
     return (
       <text
         x={x}
         y={y}
-        fill="white"
-        textAnchor={x > cx ? 'start' : 'end'}
+        fill="black" // Change fill color from "white" to "black"
+        textAnchor="middle" // Use "middle" for better centering
         dominantBaseline="central"
         fontSize="13"
         fontWeight="bold"
       >
         {`${percentage}%`}
       </text>
-    )
-  }
+    );
+  };
 
   return (
     <>
