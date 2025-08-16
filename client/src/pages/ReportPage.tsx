@@ -43,6 +43,7 @@ export function ReportPage() {
 
   useEffect(() => {
     const fetchReport = async () => {
+      setLoading(true);
       if (!id) {
         toast({
           title: "Report Not Found",
@@ -50,33 +51,52 @@ export function ReportPage() {
           variant: "destructive",
         });
         navigate("/");
+        setLoading(false);
         return;
       }
 
-      // Check if report data is already available in location state
+      // Priority 1: Report data passed via navigation state
       if (location.state?.report) {
         setReport(location.state.report);
         setLoading(false);
         return;
       }
 
-      // If not in state, fetch from API
+      // Priority 2: Fetch from API (for logged-in users)
       try {
-        setLoading(true);
-        
         const fetchedReport = await getReport(id);
         setReport(fetchedReport);
-      } catch (error) {
-        console.error("Error fetching report:", error);
-        toast({
-          title: "Report Not Found",
-          description: "Failed to load report data.",
-          variant: "destructive",
-        });
-        navigate("/");
-      } finally {
         setLoading(false);
+        return;
+      } catch (apiError) {
+        // This is expected to fail for guest users, so we continue
+        console.warn(`API fetch failed for report ${id}. This is expected for guest users. Checking session storage next.`);
       }
+
+      // Priority 3: Check session storage (for guest users on page reload)
+      const guestHistoryString = sessionStorage.getItem('guestReportHistory');
+      if (guestHistoryString) {
+        try {
+          const guestHistory: Report[] = JSON.parse(guestHistoryString);
+          const reportFromSession = guestHistory.find(r => r.job_id === id);
+          if (reportFromSession) {
+            setReport(reportFromSession);
+            setLoading(false);
+            return;
+          }
+        } catch (e) {
+          console.error("Failed to parse guest history from session storage", e);
+        }
+      }
+
+      // If all methods fail, the report is not found
+      toast({
+        title: "Report Not Found",
+        description: "Could not find the specified report.",
+        variant: "destructive",
+      });
+      navigate("/");
+      setLoading(false);
     };
 
     fetchReport();

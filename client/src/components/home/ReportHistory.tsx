@@ -49,7 +49,7 @@ export function ReportHistory({ isSidebar = false, isSidebarOpen = true, reportC
   };
 
   const handleViewReport = (report: Report) => {
-    navigate(`/report/${report.job_id}`);
+    navigate(`/report/${report.job_id}`, { state: { report: report } });
   };
 
   const handleDeleteReport = async (jobId: string) => {
