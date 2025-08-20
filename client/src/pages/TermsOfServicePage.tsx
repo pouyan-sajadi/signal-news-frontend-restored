@@ -3,7 +3,7 @@ export function TermsOfServicePage() {
     <div className="container mx-auto px-4 py-8 max-w-4xl">
       <h1 className="text-3xl font-bold mb-4">Terms of Service</h1>
       <div className="space-y-4 text-muted-foreground">
-        <p>Last updated: [Date]</p>
+        <p>Last updated: Aug 19, 2025</p>
 
         <h2 className="text-xl font-semibold">1. Agreement to Terms</h2>
         <p>
@@ -37,7 +37,7 @@ export function TermsOfServicePage() {
 
         <h2 className="text-xl font-semibold">7. Contact Us</h2>
         <p>
-          If you have any questions about these Terms, please contact us at [Your Contact Email].
+          If you have any questions about these Terms, please contact us at pouyan.sajadi@gmail.com.
         </p>
       </div>
     </div>

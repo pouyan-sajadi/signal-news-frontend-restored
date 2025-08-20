@@ -3,7 +3,7 @@ export function PrivacyPolicyPage() {
     <div className="container mx-auto px-4 py-8 max-w-4xl">
       <h1 className="text-3xl font-bold mb-4">Privacy Policy</h1>
       <div className="space-y-4 text-muted-foreground">
-        <p>Last updated: [Date]</p>
+        <p>Last updated: Aug 19, 2025</p>
         
         <h2 className="text-xl font-semibold">1. Introduction</h2>
         <p>
@@ -38,7 +38,7 @@ export function PrivacyPolicyPage() {
 
         <h2 className="text-xl font-semibold">6. Contact Us</h2>
         <p>
-          If you have questions or comments about this Privacy Policy, please contact us at [Your Contact Email].
+          If you have questions or comments about this Privacy Policy, please contact us at pouyan.sajadi@gmail.com.
         </p>
       </div>
     </div>
