@@ -84,5 +84,3 @@ export function LayoutWithSidebar({ children, reportCount, setReportCount }: Lay
     </div>
   );
 }
-  );
-}

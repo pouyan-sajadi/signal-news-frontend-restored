@@ -89,7 +89,18 @@ import { Report } from '../pages/ReportPage';
 
 export const getReport = async (jobId: string): Promise<Report> => {
   try {
-    const response = await api.get(`${BACKEND_URL}/reports/${jobId}`);
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      // This case should ideally not be hit for logged-in users' reports,
+      // but as a fallback, we can throw an error. Guests can't reload reports anyway.
+      throw new Error("User not authenticated.");
+    }
+
+    const response = await api.get(`${BACKEND_URL}/reports/${jobId}`, {
+      headers: {
+        'Authorization': `Bearer ${session.access_token}`,
+      },
+    });
     return response.data as Report;
   } catch (error: any) {
     console.error(`Error fetching report ${jobId}:`, error);
