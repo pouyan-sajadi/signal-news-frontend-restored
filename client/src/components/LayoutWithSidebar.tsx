@@ -17,12 +17,6 @@ export function LayoutWithSidebar({ children, reportCount, setReportCount }: Lay
   const [isDesktopSidebarOpen, setIsDesktopSidebarOpen] = useState(false);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
-  const handleSignOut = () => {
-    // This will trigger the useEffect in ReportHistory to refetch.
-    // Since the user is signed out, it will get an empty list, clearing the UI.
-    setReportCount(0);
-  };
-
   return (
     <div className="flex min-h-screen bg-background">
       {/* Desktop Sidebar */}
@@ -81,7 +75,6 @@ export function LayoutWithSidebar({ children, reportCount, setReportCount }: Lay
           isDesktopSidebarOpen={isDesktopSidebarOpen}
           setIsDesktopSidebarOpen={setIsDesktopSidebarOpen}
           setIsMobileSidebarOpen={setIsMobileSidebarOpen}
-          onSignOut={handleSignOut}
         />
         <div className="flex-grow overflow-y-auto">
           {children || <Outlet context={{ setReportCount }} />}
@@ -89,5 +82,7 @@ export function LayoutWithSidebar({ children, reportCount, setReportCount }: Lay
         <Footer />
       </main>
     </div>
+  );
+}
   );
 }

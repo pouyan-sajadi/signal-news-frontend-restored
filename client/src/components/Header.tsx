@@ -10,10 +10,9 @@ interface HeaderProps {
   isDesktopSidebarOpen: boolean;
   setIsDesktopSidebarOpen: (isOpen: boolean) => void;
   setIsMobileSidebarOpen: (isOpen: boolean) => void;
-  onSignOut: () => void;
 }
 
-export function Header({ isDesktopSidebarOpen, setIsDesktopSidebarOpen, setIsMobileSidebarOpen, onSignOut }: HeaderProps) {
+export function Header({ isDesktopSidebarOpen, setIsDesktopSidebarOpen, setIsMobileSidebarOpen }: HeaderProps) {
   const navigate = useNavigate()
   const location = useLocation()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -58,13 +57,13 @@ export function Header({ isDesktopSidebarOpen, setIsDesktopSidebarOpen, setIsMob
             History
           </Button>
           <ThemeToggle />
-          <UserProfile onSignOut={onSignOut} />
+          <UserProfile />
         </div>
 
         {/* Mobile Navigation */}
         <div className="md:hidden flex items-center gap-2">
           <ThemeToggle />
-          <UserProfile onSignOut={onSignOut} />
+          <UserProfile />
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon">

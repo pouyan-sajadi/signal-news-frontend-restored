@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import type { User } from '@supabase/supabase-js'
 
-export function UserProfile({ onSignOut }: { onSignOut: () => void; }) {
+export function UserProfile() {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
 
@@ -15,18 +15,13 @@ export function UserProfile({ onSignOut }: { onSignOut: () => void; }) {
     fetchUser()
 
     const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
-      const currentUser = session?.user ?? null;
-      if (user && !currentUser) {
-        // User signed out
-        if (onSignOut) onSignOut();
-      }
-      setUser(currentUser)
+      setUser(session?.user ?? null)
     })
 
     return () => {
       authListener.subscription.unsubscribe()
     }
-  }, [user, onSignOut])
+  }, [])
 
   const handleSignIn = async () => {
     await supabase.auth.signInWithOAuth({
@@ -38,8 +33,8 @@ export function UserProfile({ onSignOut }: { onSignOut: () => void; }) {
   }
 
   const handleSignOut = async () => {
-    await supabase.auth.signOut()
-    // The onAuthStateChange listener will handle the rest
+    await supabase.auth.signOut();
+    window.location.reload(); // Force a full page reload to clear all state
   }
 
   if (loading) {

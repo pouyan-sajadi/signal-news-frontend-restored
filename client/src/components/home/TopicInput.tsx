@@ -42,8 +42,8 @@ export function TopicInput({
             onChange={(e) => onChange(e.target.value)}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
-            placeholder="Enter any news topic... (e.g., 'AI developments in healthcare', 'Climate change policies 2024')"
-            className={`pl-10 h-14 text-lg transition-all duration-200 ${
+            placeholder="Enter any news topic... (e.g., 'AI developments in healthcare', 'Climate change policies 2025')"
+            className={`pl-10 h-14 text-base sm:text-lg placeholder:text-sm sm:placeholder:text-base transition-all duration-200 ${
               isFocused ? 'ring-2 ring-blue-500 border-blue-500' : ''
             }`}
             disabled={disabled}

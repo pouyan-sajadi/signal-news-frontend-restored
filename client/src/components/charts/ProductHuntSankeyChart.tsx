@@ -92,7 +92,7 @@ export const ProductHuntSankeyChart = ({ data }: ProductHuntSankeyChartProps) =>
       />
       {selectedNode && (
         <Dialog open={selectedNode !== null} onOpenChange={() => setSelectedNode(null)}>
-          <DialogContent>
+          <DialogContent className="max-h-[80vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>{selectedNode.id}</DialogTitle>
               <DialogDescription>
