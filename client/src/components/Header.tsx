@@ -1,7 +1,7 @@
-import { Newspaper, History, Search, LayoutDashboard, Menu } from "lucide-react"
+import { Newspaper, History, Search, LayoutDashboard, Menu, Info } from "lucide-react"
 import { Button } from "./ui/button"
 import { ThemeToggle } from "./ui/theme-toggle"
-import { useNavigate, useLocation } from "react-router-dom"
+import { useNavigate, useLocation, Link } from "react-router-dom"
 import { UserProfile } from "./UserProfile"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState } from "react";
@@ -38,7 +38,7 @@ export function Header({ isDesktopSidebarOpen, setIsDesktopSidebarOpen, setIsMob
         >
           <Newspaper className="h-6 w-6 text-blue-600" />
           <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-            Signal News
+            Hey Signal
           </span>
         </div>
         
@@ -55,6 +55,12 @@ export function Header({ isDesktopSidebarOpen, setIsDesktopSidebarOpen, setIsMob
           <Button variant="ghost" size="sm" onClick={() => setIsDesktopSidebarOpen(!isDesktopSidebarOpen)}>
             <History className="h-4 w-4 mr-1" />
             History
+          </Button>
+          <Button variant="ghost" size="sm" asChild>
+            <Link to="/about">
+              <Info className="h-4 w-4 mr-1" />
+              About
+            </Link>
           </Button>
           <ThemeToggle />
           <UserProfile />
@@ -83,6 +89,12 @@ export function Header({ isDesktopSidebarOpen, setIsDesktopSidebarOpen, setIsMob
                 <Button variant="ghost" className="justify-start" onClick={() => setIsMobileSidebarOpen(true)}> {/* Changed to setIsMobileSidebarOpen(true) */}
                   <History className="h-4 w-4 mr-2" />
                   History
+                </Button>
+                <Button variant="ghost" className="justify-start" asChild>
+                  <Link to="/about" onClick={() => setIsMobileMenuOpen(false)}>
+                    <Info className="h-4 w-4 mr-2" />
+                    About
+                  </Link>
                 </Button>
               </nav>
             </SheetContent>

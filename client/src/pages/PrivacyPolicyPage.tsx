@@ -7,7 +7,7 @@ export function PrivacyPolicyPage() {
         
         <h2 className="text-xl font-semibold">1. Introduction</h2>
         <p>
-          Welcome to Signal News. We are committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our application.
+          Welcome to Hey Signal. We are committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our application.
         </p>
 
         <h2 className="text-xl font-semibold">2. Information We Collect</h2>

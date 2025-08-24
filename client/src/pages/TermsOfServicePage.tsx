@@ -7,7 +7,7 @@ export function TermsOfServicePage() {
 
         <h2 className="text-xl font-semibold">1. Agreement to Terms</h2>
         <p>
-          By using our application, Signal News, you agree to be bound by these Terms of Service.
+          By using our application, Hey Signal, you agree to be bound by these Terms of Service.
         </p>
 
         <h2 className="text-xl font-semibold">2. Use of the Service</h2>

@@ -35,7 +35,7 @@ export const getDashboardData = async () => {
         hot_topics: pulseData.news_word_cloud.hot_topics.map((topic: any) => ({
           title: topic.topic,
           url: '#',
-          source: 'Signal News',
+          source: 'Hey Signal',
           // Use the single, validated, and formatted timestamp for all items
           publishedAt: isValidDate ? formattedTimestamp : new Date().toISOString(),
           summary: topic.summary,

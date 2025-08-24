@@ -116,7 +116,7 @@ export function Dashboard() {
                   <DialogTitle>About the Dashboard</DialogTitle>
                 </DialogHeader>
                 <p>
-                  This dashboard provides a real-time overview of the tech landscape. It combines data from various sources to help you spot emerging trends, understand market sentiment, and stay informed about the latest developments. To get more details on each, simply click on them.
+                  This dashboard provides a daily overview of the tech landscape. It combines data from various sources to help you spot emerging trends, understand market sentiment, and stay informed about the latest developments. To get more details on each, simply click on them.
                 </p>
               </DialogContent>
             </Dialog>

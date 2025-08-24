@@ -7,6 +7,7 @@ import { ReportPage } from "./pages/ReportPage"
 import { PrivacyPolicyPage } from "./pages/PrivacyPolicyPage"
 import { TermsOfServicePage } from "./pages/TermsOfServicePage"
 import { BlankPage } from "./pages/BlankPage"
+import { AboutPage } from "./pages/AboutPage"
 import { useState } from "react"
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
             <Route path="/report/:id" element={<ReportPage />} />
             <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
             <Route path="/terms-of-service" element={<TermsOfServicePage />} />
+            <Route path="/about" element={<AboutPage />} />
           </Route>
           <Route path="*" element={<BlankPage />} />
         </Routes>

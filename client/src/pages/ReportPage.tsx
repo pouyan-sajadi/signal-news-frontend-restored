@@ -263,7 +263,7 @@ export function ReportPage() {
           
           <div className="flex flex-wrap gap-2">
             <Badge variant="secondary">{report.user_preferences.focus}</Badge>
-            <Badge variant="secondary">Depth: {report.user_preferences.depth}/5</Badge>
+            <Badge variant="secondary">Depth: {report.user_preferences.depth}/3</Badge>
             <Badge variant="secondary">{report.user_preferences.tone}</Badge>
           </div>
           
