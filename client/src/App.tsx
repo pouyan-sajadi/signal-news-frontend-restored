@@ -9,6 +9,7 @@ import { TermsOfServicePage } from "./pages/TermsOfServicePage"
 import { BlankPage } from "./pages/BlankPage"
 import { AboutPage } from "./pages/AboutPage"
 import { useState } from "react"
+import { Analytics } from "@vercel/analytics/react"
 
 function App() {
   const [reportCount, setReportCount] = useState(0);
@@ -16,6 +17,7 @@ function App() {
   return (
     <ThemeProvider defaultTheme="light" storageKey="ui-theme">
       <Router>
+        <Analytics />
         <Routes>
           <Route path="/" element={<LayoutWithSidebar reportCount={reportCount} setReportCount={setReportCount} />}>
             <Route index element={<HomePage />} />
